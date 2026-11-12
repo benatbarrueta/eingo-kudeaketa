@@ -1,0 +1,33 @@
+name: PR title
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-title-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  title:
+    name: PR title
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Validate Conventional Commit title
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        shell: bash
+        run: |
+          node <<'NODE'
+          const title = process.env.PR_TITLE;
+          const pattern = /^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-zA-Z0-9][a-zA-Z0-9._/-]*\))?!?: \S[^\r\n]*$/u;
+          if (!pattern.test(title) || title !== title.trim()) {
+            console.error('::error::El título debe usar tipo(ámbito opcional): descripción. Ejemplos: feat: añadir calendario; fix(sync): corregir conflictos; chore!: actualizar configuración. Tipos: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert.');
+            process.exit(1);
+          }
+          console.log('Título de PR válido.');
+          NODE

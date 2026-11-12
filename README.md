@@ -131,6 +131,14 @@ El workflow `.github/workflows/ci.yml` se ejecuta en cada push y pull request, y
 
 Las comprobaciones usan permisos de lectura del repositorio y datos de prueba locales. Después de la primera ejecución en GitHub, selecciona **Backend tests** y **Frontend build** en **Require status checks to pass** del ruleset de `master`.
 
+### Títulos y etiquetas de pull requests
+
+El check **PR title** valida el formato `tipo(ámbito opcional): descripción` y se vuelve a ejecutar al editar el título. Tipos permitidos: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore` y `revert`. El ámbito es opcional y `!` permite señalar cambios incompatibles. Ejemplos: `feat: añadir calendario`, `fix(sync): corregir conflictos` y `chore!: actualizar configuración`. El ruleset de `master` debe exigir también **PR title** para impedir merges con títulos inválidos.
+
+El workflow **PR labels** usa [actions/labeler](https://github.com/actions/labeler) y las rutas de `.github/labeler.yml` para asignar `frontend`, `backend`, `google`, `i18n`, `tests`, `documentation`, `ci` y `dependencies`. Una PR puede recibir varias etiquetas. Al cambiar los archivos se retiran las etiquetas configuradas que ya no correspondan; las demás etiquetas se conservan. Puede crear las etiquetas que falten con permiso `issues: write`.
+
+El etiquetado utiliza la configuración de la rama base sin descargar ni ejecutar código de la PR. Empezará a funcionar una vez incorporado este workflow a `master`; la PR que lo introduce no ejecuta todavía el etiquetado automático.
+
 ### Cambios desde la última visita
 
 Al abrir la web o volver a una pestaña que estaba oculta se solicita la sincronización de Sheets y Docs antes de cargar los datos. Si falla, se muestra el error y se puede reintentar. El backend debe estar encendido.
