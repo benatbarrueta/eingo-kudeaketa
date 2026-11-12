@@ -1,25 +1,25 @@
 import { t } from "../lib/labels";
 
 const apiOrigin = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
-const errorMessages: Record<string, string> = {
-  sync_conflict: t.syncConflict,
-  sync_ambiguous_events: t.syncConflict,
-  sync_initial_mismatch: t.sourcesDiffer,
-  sync_state_mismatch: t.syncConflict,
-  sources_differ: t.sourcesDiffer,
-  sync_pending: t.syncPending,
-  sheets_access_denied: t.sheetsError,
-  sheets_unavailable: t.sheetsError,
-  sheets_api_error: t.sheetsError,
-  month_without_block: t.monthMissing,
-  revision_conflict: t.conflict,
-  manual_review: t.manual,
-  unsafe_structure: t.unsafe,
-  rate_limited: t.rate,
-  validation_error: t.invalid,
-  date_changes_position: t.dateChangesPosition,
-  wrong_year: t.invalid,
-  invalid_fields: t.invalid,
+const errorMessages: Record<string, keyof typeof t> = {
+  sync_conflict: "syncConflict",
+  sync_ambiguous_events: "syncConflict",
+  sync_initial_mismatch: "sourcesDiffer",
+  sync_state_mismatch: "syncConflict",
+  sources_differ: "sourcesDiffer",
+  sync_pending: "syncPending",
+  sheets_access_denied: "sheetsError",
+  sheets_unavailable: "sheetsError",
+  sheets_api_error: "sheetsError",
+  month_without_block: "monthMissing",
+  revision_conflict: "conflict",
+  manual_review: "manual",
+  unsafe_structure: "unsafe",
+  rate_limited: "rate",
+  validation_error: "invalid",
+  date_changes_position: "dateChangesPosition",
+  wrong_year: "invalid",
+  invalid_fields: "invalid",
 };
 
 export class ApiError extends Error {
@@ -57,7 +57,7 @@ export async function apiRequest<T>(
     const code: unknown = body?.error?.code;
     const message =
       typeof code === "string" && Object.hasOwn(errorMessages, code)
-        ? errorMessages[code]
+        ? t[errorMessages[code]]
         : t.failed;
     throw new ApiError(response.status, message);
   }

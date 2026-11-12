@@ -3,7 +3,7 @@ import "../styles/EventForm.css";
 import { X } from "lucide-react";
 import { createEvent, updateEvent, deleteEvent } from "../api/calendar";
 import type { Config, EventRow, SaveResult, Table } from "../types/calendar";
-import { t } from "../lib/labels";
+import { useLabels } from "../lib/labels";
 
 const descriptionOptions = ["ERROMERIA", "IBILTARIA"];
 const otherDescription = "other";
@@ -33,6 +33,7 @@ export function EventForm({
   close: () => void;
   saved: (result: SaveResult) => void;
 }) {
+  const { t, columnLabel, descriptionLabel, message } = useLabels();
   const [openedAt] = useState(() => new Date());
   const pad = (value: number) => String(value).padStart(2, "0");
   const firstDate = config.year + "-01-01";
@@ -143,11 +144,11 @@ export function EventForm({
               return (
                 <div className="descriptionFields" key={column}>
                   <label>
-                    {column}
+                    {columnLabel(column)}
                     <select value={description} onChange={(event) => setDescription(event.target.value)}>
                       <option value="">{t.chooseDescription}</option>
                       {descriptionOptions.map((option) => (
-                        <option key={option} value={option}>{option}</option>
+                        <option key={option} value={option}>{descriptionLabel(option)}</option>
                       ))}
                       <option value={otherDescription}>{t.otherDescription}</option>
                     </select>
@@ -170,7 +171,7 @@ export function EventForm({
               const value = nativeValue(column, existing);
               return (
                 <label key={column}>
-                  {column}
+                  {columnLabel(column)}
                   <input
                     name={fieldName}
                     type={column === "ORDUA" ? "time" : "number"}
@@ -183,7 +184,7 @@ export function EventForm({
             }
             return (
               <label key={column}>
-                {column}
+                {columnLabel(column)}
                 <textarea
                   name={fieldName}
                   defaultValue={existing}
@@ -198,7 +199,7 @@ export function EventForm({
         </fieldset>
         {error && (
           <p className="error" role="alert">
-            {error}
+            {message(error)}
           </p>
         )}
         <div className="formActions">

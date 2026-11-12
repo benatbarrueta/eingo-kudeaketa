@@ -29,9 +29,19 @@
   gap: 12px;
 }
 
-.headerNavigation {
+.headerBottom {
   max-width: 1252px;
   margin: 18px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.headerNavigation {
+  min-width: 0;
+  flex: 1;
+  margin: 0;
   display: flex;
   gap: 8px;
   overflow-x: auto;
@@ -81,8 +91,12 @@
     gap: 8px;
   }
 
-  .headerNavigation {
+  .headerBottom {
     margin-top: 10px;
+    gap: 8px;
+  }
+
+  .headerNavigation {
     gap: 0;
   }
 
@@ -91,3 +105,73 @@
     font-size: .8rem;
   }
 }
+
+/* Compact language dropdown; flags are SVG so they render on every platform. */
+.languagePicker {
+  position: relative;
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: .8rem;
+  font-weight: 650;
+  margin-bottom: 3px;
+}
+
+.languagePicker summary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 6px 9px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  background: white;
+  cursor: pointer;
+  list-style: none;
+}
+
+.languagePicker summary::-webkit-details-marker { display: none; }
+.languagePicker summary:hover,
+.languagePicker[open] summary { background: #f4f7ff; color: var(--blue); }
+.languagePicker summary:focus-visible,
+.languageOptions button:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.languagePicker[open] summary > svg:last-child { transform: rotate(180deg); }
+
+.languageFlag {
+  width: 23px;
+  height: 15px;
+  flex-shrink: 0;
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 8%);
+}
+
+.languageOptions {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 112px;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 8px 24px rgb(20 40 80 / 12%);
+}
+
+.languageOptions button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 36px;
+  padding: 8px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.languageOptions button:hover,
+.languageOptions button[aria-pressed="true"] { background: #eef3ff; color: var(--blue); }
+.languageOptions button > svg:last-child:not(.languageFlag) { margin-left: auto; }
