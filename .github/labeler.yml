@@ -1,37 +1,37 @@
-frontend:
+"🎨 frontend":
   - changed-files:
       - any-glob-to-any-file: 'frontend/**'
-backend:
+"⚙️ backend":
   - changed-files:
       - any-glob-to-any-file: 'backend/**'
-google:
+"🔗 google":
   - changed-files:
       - any-glob-to-any-file:
           - 'backend/app/integrations/google/**'
           - 'backend/app/repositories/google_*'
           - 'backend/app/repositories/synced_repository.py'
           - 'backend/app/services/bidirectional_sync.py'
-i18n:
+"🌐 i18n":
   - changed-files:
       - any-glob-to-any-file:
           - 'frontend/src/lib/locales/**'
           - 'frontend/src/lib/i18n*'
           - 'frontend/src/lib/labels.ts'
           - 'frontend/src/components/LanguagePicker.tsx'
-tests:
+"🧪 tests":
   - changed-files:
       - any-glob-to-any-file:
           - 'backend/tests/**'
           - 'frontend/tests/**'
-documentation:
+"📚 documentation":
   - changed-files:
       - any-glob-to-any-file:
           - '**/*.md'
           - 'docs/**'
-ci:
+"🚦 ci":
   - changed-files:
       - any-glob-to-any-file: '.github/**'
-dependencies:
+"📦 dependencies":
   - changed-files:
       - any-glob-to-any-file:
           - 'frontend/package.json'
