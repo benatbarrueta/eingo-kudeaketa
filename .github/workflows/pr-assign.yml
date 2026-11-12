@@ -2,10 +2,11 @@ name: PR assignment
 
 on:
   pull_request_target:
-    types: [opened, reopened]
+    types: [opened, reopened, synchronize, ready_for_review]
 
 permissions:
   issues: write
+  pull-requests: write
 
 jobs:
   assign:
@@ -17,7 +18,10 @@ jobs:
       - uses: actions/github-script@v8
         with:
           script: |
-            const pr = context.payload.pull_request;
+            const { data: pr } = await github.rest.pulls.get({
+              ...context.repo,
+              pull_number: context.issue.number,
+            });
             const author = pr.user.login;
             if (pr.user.type === 'Bot') {
               core.info('Skipping bot author.');

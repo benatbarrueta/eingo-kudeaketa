@@ -21,7 +21,7 @@ jobs:
         with:
           script: |
             // Read live metadata; the event can predate the automatic assignment.
-            const waitForAutoAssign = ['opened', 'reopened'].includes(context.payload.action);
+            const waitForAutoAssign = ['opened', 'reopened', 'synchronize', 'ready_for_review'].includes(context.payload.action);
             const attempts = waitForAutoAssign ? 13 : 1;
             for (let attempt = 0; attempt < attempts; attempt++) {
               const { data: pr } = await github.rest.pulls.get({
