@@ -1,0 +1,39 @@
+name: PR assignee
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, assigned, unassigned, ready_for_review]
+
+permissions:
+  pull-requests: read
+
+concurrency:
+  group: pr-assignee-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  assignee:
+    name: PR assignee
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/github-script@v8
+        with:
+          script: |
+            // Read live metadata; the event can predate the automatic assignment.
+            const waitForAutoAssign = ['opened', 'reopened'].includes(context.payload.action);
+            const attempts = waitForAutoAssign ? 13 : 1;
+            for (let attempt = 0; attempt < attempts; attempt++) {
+              const { data: pr } = await github.rest.pulls.get({
+                ...context.repo,
+                pull_number: context.issue.number,
+              });
+              if (pr.assignees.length > 0) {
+                core.info('La PR tiene al menos una persona asignada.');
+                return;
+              }
+              if (attempt < attempts - 1) {
+                await new Promise(resolve => setTimeout(resolve, 5000));
+              }
+            }
+            core.setFailed('La PR debe tener al menos una persona asignada antes de integrarse.');

@@ -1,0 +1,37 @@
+name: PR assignment
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+permissions:
+  issues: write
+
+jobs:
+  assign:
+    name: Assign PR author
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Uses PR metadata only; never checks out or executes PR code.
+      - uses: actions/github-script@v8
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const author = pr.user.login;
+            if (pr.user.type === 'Bot') {
+              core.info('Skipping bot author.');
+              return;
+            }
+            if (pr.assignees.some(user => user.login === author)) {
+              core.info('PR author is already assigned.');
+              return;
+            }
+            const { data } = await github.rest.issues.addAssignees({
+              ...context.repo,
+              issue_number: pr.number,
+              assignees: [author],
+            });
+            if (!data.assignees.some(user => user.login === author)) {
+              core.setFailed('GitHub did not assign the PR author. Check repository assignment permissions.');
+            }
