@@ -127,4 +127,4 @@ El workflow `.github/workflows/ci.yml` se ejecuta en cada push y pull request, y
 - **Backend tests** instala las dependencias con Python 3.12, ejecuta Pytest en modo mock y comprueba la sintaxis de Python.
 - **Frontend build** instala las dependencias con `npm ci`, comprueba TypeScript y compila la web con Node.js 22.
 
-Las comprobaciones usan permisos de lectura del repositorio y datos de prueba locales. Después de la primera ejecución en GitHub, selecciona **Backend tests** y **Frontend build** en **Require status checks to pass** del ruleset de `main`.
+Las comprobaciones usan permisos de lectura del repositorio y datos de prueba locales. Después de la primera ejecución en GitHub, selecciona **Backend tests** y **Frontend build** en **Require status checks to pass** del ruleset de `master`.
