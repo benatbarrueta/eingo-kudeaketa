@@ -124,7 +124,7 @@ Google Docs usa `requiredRevisionId`. Sheets comprueba su contenido antes de esc
 
 ## Comprobaciones en GitHub
 
-El workflow `.github/workflows/ci.yml` se ejecuta en cada push y pull request, y también puede lanzarse manualmente desde Actions.
+El workflow `.github/workflows/ci.yml` se ejecuta en cada push y también puede lanzarse manualmente desde Actions. Abrir o actualizar una pull request no duplica las pruebas: el ruleset utiliza los resultados del push de su commit. La validación del título y el etiquetado mantienen sus propios eventos de PR.
 
 - **Backend tests** instala las dependencias con Python 3.12, ejecuta Pytest en modo mock y comprueba la sintaxis de Python.
 - **Frontend build** instala las dependencias con `npm ci`, comprueba TypeScript y compila la web con Node.js 22.
