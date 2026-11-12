@@ -35,11 +35,9 @@ El modo predeterminado es `DATA_SOURCE=mock`. En **Ekitaldia gehitu**, elige el 
 
 ## Conectar la copia real
 
-Sigue [la guía de Google Cloud y prueba de escritura](docs/google-cloud.md). Configura `DATA_SOURCE=google`, el año, el ID de la copia, el índice de la tabla, la pestaña cuando haya varias, la ruta al JSON y un token administrativo. En el formulario, el administrador introduce ese token para guardar. La web lo envía como `Authorization: Bearer …`; no lo persiste. El JSON de la cuenta de servicio solo se utiliza en el backend.
+Sigue [la guía de Google Cloud y prueba de escritura](docs/google-cloud.md). Configura la fuente de datos, el año, los identificadores de los archivos y la ruta al JSON de la cuenta de servicio. Las credenciales de Google se utilizan desde el backend.
 
-Para trabajar desde este equipo con Vite, puedes activar `EINGO_LOCAL_WRITES=true` en `backend/.env` y reiniciar Vite. Abre la agenda en `http://127.0.0.1:5173` con `VITE_API_URL` vacío. Vite añade el token del lado del servidor a las escrituras del mismo origen y el formulario omite el campo. Usa este modo con Vite accesible solo desde tu equipo, sin túneles ni proxies externos. La compilación para despliegue pide el token en el formulario.
-
-La demo real está pensada para localhost o para una red privada detrás de HTTPS. Las rutas de consulta no requieren token, así que protege el acceso a la aplicación si el calendario es privado. Ejecuta un solo proceso de FastAPI para compartir el límite de escrituras (20 intentos por IP y minuto) y el bloqueo local de edición. Entre procesos o ediciones manuales, Google aplica el control por revisión.
+Por decisión del proyecto, esta fase permite las operaciones sin token administrativo ni login. El inicio de sesión y los permisos por rol se implementarán cuando el usuario defina su funcionamiento. Se mantienen la validación de datos, los límites de frecuencia y las protecciones de sincronización.
 
 ## Organización
 
@@ -54,7 +52,7 @@ La demo real está pensada para localhost o para una red privada detrás de HTTP
 | `frontend/src/api`, `hooks`, `lib` | Cliente HTTP, estado de la agenda y utilidades |
 | `docs` | Configuración de Google Cloud y verificación manual |
 
-React Router sirve el panel en `/`, el listado en `/events` y la vista del documento en `/document`. Si alojas la compilación fuera de Vite, configura el servidor para servir `index.html` en las rutas de la interfaz y dirigir `/api` a FastAPI.
+La navegación superior permite abrir el panel en `/`, los eventos en `/events`, el calendario mensual en `/calendar`, la hoja de cálculo con todas las columnas en `/spreadsheet` y el documento en `/document`. El calendario permite abrir la edición de un evento y crear uno con la fecha del día seleccionado. Si alojas la compilación fuera de Vite, configura el servidor para servir `index.html` en las rutas de la interfaz y dirigir `/api` a FastAPI.
 
 ## API
 
@@ -68,7 +66,7 @@ React Router sirve el panel en `/`, el listado en `/events` y la vista del docum
 | GET `/api/document/status` | Conexión y estado de escritura |
 | POST `/api/demo/reset` | Restablece la demo; solo disponible en modo mock |
 
-Ejemplo de alta: `{"date":"2027-02-12","town":"GERNIKA","fields":{"EKITALDIA":"Kalejira"}}`. Usa los nombres de columnas devueltos por la API para `fields`. Los errores tienen la forma `{"error":{"code":"month_without_block"}}`. Los códigos incluyen 401 (token), 409 (estructura o revisión), 422 (datos), 429 (límite) y 502 (Google no disponible o sin permisos).
+Ejemplo de alta: `{"date":"2027-02-12","town":"GERNIKA","fields":{"EKITALDIA":"Kalejira"}}`. Usa los nombres de columnas devueltos por la API para `fields`. Los errores tienen la forma `{"error":{"code":"month_without_block"}}`. Los códigos incluyen 409 (estructura o revisión), 422 (datos), 429 (límite) y 502 (Google no disponible o sin permisos).
 
 ## Pruebas
 
@@ -106,7 +104,7 @@ Con la hoja vacía, pulsa **Inportatu Docs-eko ekitaldiak** y confirma para copi
 
 Las altas, ediciones y eliminaciones de la web escriben primero en Sheets y después actualizan la fila correspondiente de Docs. Si falla el segundo paso, el mensaje indica que Sheets ya está guardado y debes pulsar **Sinkronizatu dokumentua**. Ese botón permite recuperar una única modificación pendiente, también tras reiniciar. Diferencias mayores requieren revisión de los datos. Google Docs conserva sus separadores y su formato.
 
-`GET /api/calendar` devuelve las nueve columnas de la fuente principal. `GET /api/document/structure` devuelve la tabla real de Docs. `POST /api/sheets/import-document` importa eventos y `POST /api/document/sync` intenta reanudar la proyección pendiente. Ambas rutas exigen la misma autenticación que las escrituras de eventos.
+`GET /api/calendar` devuelve las nueve columnas de la fuente principal. `GET /api/document/structure` devuelve la tabla real de Docs. `POST /api/sheets/import-document` importa eventos y `POST /api/document/sync` intenta reanudar la proyección pendiente. Ambas rutas aplican las mismas validaciones y límites que las escrituras de eventos.
 
 El lector admite fechas en euskera, ISO o día/mes/año, y hasta 9998 eventos en una hoja sin filas vacías entre eventos. Rechaza fórmulas dentro de los datos. Las fechas deben estar ordenadas.
 
@@ -132,3 +130,9 @@ El workflow `.github/workflows/ci.yml` se ejecuta en cada push y pull request, y
 - **Frontend build** instala las dependencias con `npm ci`, comprueba TypeScript y compila la web con Node.js 22.
 
 Las comprobaciones usan permisos de lectura del repositorio y datos de prueba locales. Después de la primera ejecución en GitHub, selecciona **Backend tests** y **Frontend build** en **Require status checks to pass** del ruleset de `master`.
+
+### Cambios desde la última visita
+
+Al abrir la web o volver a una pestaña que estaba oculta se solicita la sincronización de Sheets y Docs antes de cargar los datos. Si falla, se muestra el error y se puede reintentar. El backend debe estar encendido.
+
+La web compara los eventos con la última copia vista en ese navegador y muestra altas, bajas y campos modificados. La primera visita establece la referencia; no depende de que el backend haya estado apagado. La copia se guarda en el almacenamiento local del navegador e incluye los datos de los eventos. Al borrar ese almacenamiento o cambiar de navegador se pierde la referencia. Se muestran diferencias finales, sin atribuir autores ni reconstruir ediciones intermedias. Un cambio de fecha o de localidad puede aparecer como baja y alta.

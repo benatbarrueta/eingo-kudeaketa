@@ -11,7 +11,6 @@ class Settings:
     tab: str | None = None
     credentials: str = ""
     table: int = 0
-    token: str = ""
     origin: str = "http://127.0.0.1:5173"
 
     spreadsheet: str = ""
@@ -31,7 +30,7 @@ class Settings:
             raise ValueError("Set DATA_SOURCE and a valid CALENDAR_YEAR")
         settings = cls(source, int(year), os.getenv("GOOGLE_DOCUMENT_ID", ""),
                        os.getenv("GOOGLE_TAB_ID") or None, os.getenv("GOOGLE_CREDENTIALS_PATH", ""),
-                       int(os.getenv("GOOGLE_TABLE_INDEX", "0")), os.getenv("ADMIN_TOKEN", ""),
+                       int(os.getenv("GOOGLE_TABLE_INDEX", "0")),
                        os.getenv("FRONTEND_ORIGIN", "http://127.0.0.1:5173"),
                        os.getenv("GOOGLE_SPREADSHEET_ID", ""),
                        os.getenv("GOOGLE_SHEET_NAME", "Hoja 1"),
@@ -40,8 +39,8 @@ class Settings:
                        max(10, int(os.getenv("SYNC_INTERVAL_SECONDS", "15"))),
                        os.getenv("SYNC_STATE_PATH", ".local-sync/state.json"))
         if settings.table < 0 or (source != "mock" and (
-                not settings.document or not settings.credentials or len(settings.token) < 32)):
-            raise ValueError("Google mode requires document ID, credentials, and a 32+ character admin token")
+                not settings.document or not settings.credentials)):
+            raise ValueError("Google mode requires document ID and credentials")
         if source == "sheets" and not settings.spreadsheet:
             raise ValueError("Set GOOGLE_SPREADSHEET_ID")
         return settings

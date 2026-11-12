@@ -1,12 +1,10 @@
-from hmac import compare_digest
 from threading import Lock
 from time import monotonic
 from app.models.calendar import CalendarError
 
 
 class WriteGuard:
-    def __init__(self, settings):
-        self.settings = settings
+    def __init__(self):
         self.attempts = {}
         self.lock = Lock()
 
@@ -21,7 +19,3 @@ class WriteGuard:
             if count >= 20:
                 raise CalendarError("rate_limited", 429)
             self.attempts[key] = (start, count + 1)
-        if self.settings.source != "mock":
-            supplied = request.headers.get("authorization", "").encode("utf-8")
-            if not compare_digest(supplied, f"Bearer {self.settings.token}".encode("utf-8")):
-                raise CalendarError("admin_required", 401)

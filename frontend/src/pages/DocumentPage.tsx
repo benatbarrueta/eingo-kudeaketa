@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getDocumentPreview } from "../api/calendar";
-import { ExternalLink } from "lucide-react";
+import { FilePageHeader } from "../components/FilePageHeader";
 import type { Config, Table } from "../types/calendar";
 import { t } from "../lib/labels";
 import "../styles/DocumentPage.css";
@@ -10,11 +10,15 @@ export function DocumentPage({
   config,
   highlight,
   reset,
+  busy,
+  onSynchronize,
 }: {
   table: Table;
   config: Config;
   highlight?: number;
   reset: () => void;
+  busy: boolean;
+  onSynchronize: () => void;
 }) {
   const [document, setDocument] = useState<Table>();
   const [error, setError] = useState("");
@@ -29,37 +33,28 @@ export function DocumentPage({
     return () => { active = false; };
   }, [config.source, sourceTable]);
   const table = config.source === "sheets" ? document : sourceTable;
-  if (error) return <p role="alert" className="error">{error}</p>;
-  if (!table) return <p role="status">{t.loading}</p>;
   return (
     <>
-      <div className="panelHead documentHead">
-        <div>
-          <h1>{t.document}</h1>
-          <p className="muted">{t.preview}</p>
-        </div>
-        {config.documentUrl ? (
-          <a
-            className="secondary"
-            href={config.documentUrl}
-            target="_blank"
-            rel="noreferrer"
-          >
-            {t.open}
-            <ExternalLink size={16} />
-          </a>
-        ) : (
-          <button className="secondary" onClick={reset}>
-            {t.reset}
-          </button>
-        )}
-      </div>
-      {table.rows.some((r) => r.kind === "unknown") && (
+      <FilePageHeader
+        title={t.document}
+        description={t.preview}
+        url={config.documentUrl}
+        openLabel={t.open}
+        canSynchronize={config.source === "sheets"}
+        busy={busy}
+        onSynchronize={onSynchronize}
+      />
+      {config.source === "mock" && (
+        <button className="secondary" disabled={busy} onClick={reset}>{t.reset}</button>
+      )}
+      {error && <p role="alert" className="error">{error}</p>}
+      {!table && !error && <p role="status">{t.loading}</p>}
+      {table?.rows.some((r) => r.kind === "unknown") && (
         <p className="error" role="status">
           {t.unsafe}
         </p>
       )}
-      <div
+      {table && <div
         className="card sheet"
         tabIndex={0}
         role="region"
@@ -92,7 +87,7 @@ export function DocumentPage({
             )}
           </tbody>
         </table>
-      </div>
+      </div>}
     </>
   );
 }

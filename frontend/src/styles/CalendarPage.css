@@ -1,0 +1,132 @@
+.calendarToolbar {
+  margin-bottom: 20px;
+}
+
+.calendarControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calendarControls .secondary {
+  padding: 9px;
+}
+
+.calendarSummary {
+  color: var(--muted);
+  font-size: .85rem;
+  margin-bottom: 12px;
+}
+
+.calendarViewport {
+  overflow-x: auto;
+}
+
+.monthGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  min-width: 700px;
+}
+
+.weekday {
+  padding: 12px;
+  text-align: center;
+  background: #f7f9fd;
+  color: var(--muted);
+  font-size: .73rem;
+  font-weight: 700;
+}
+
+.calendarDay {
+  min-height: 124px;
+  border-top: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  padding: 8px;
+  min-width: 0;
+}
+
+.calendarDay:nth-child(7n) {
+  border-right: 0;
+}
+
+.dayHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.dayHeading time {
+  display: grid;
+  place-items: center;
+  width: 27px;
+  height: 27px;
+  font-size: .8rem;
+  font-weight: 650;
+}
+
+.isToday .dayHeading time {
+  background: var(--blue);
+  color: white;
+  border-radius: 50%;
+}
+
+.outsideMonth {
+  background: #f8f9fc;
+  color: #8794aa;
+}
+
+.dayAdd {
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 5px;
+  color: var(--muted);
+  background: transparent;
+  width: 28px;
+  height: 28px;
+}
+
+.dayAdd:hover {
+  color: var(--blue);
+  background: #edf3ff;
+}
+
+.dayEvents {
+  display: grid;
+  gap: 5px;
+}
+
+.calendarEvent {
+  display: grid;
+  gap: 2px;
+  border: 1px solid #d9e5ff;
+  border-left: 3px solid var(--blue);
+  border-radius: 5px;
+  padding: 6px;
+  color: #204fb0;
+  background: #edf3ff;
+  text-align: left;
+  font-size: .73rem;
+  overflow-wrap: anywhere;
+}
+
+.calendarEvent:hover {
+  background: #dfeaff;
+}
+
+.calendarEvent span {
+  font-size: .68rem;
+}
+
+.calendarEmpty {
+  margin-top: 14px;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}

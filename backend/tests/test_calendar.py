@@ -192,14 +192,13 @@ def test_demo_workflow():
     assert client.get("/api/events").json()["events"] == initial
 
 
-def test_real_write_requires_token():
-    class NoAccess:
-        def read(self):
-            pytest.fail("Unauthorized request contacted Docs")
-    client = TestClient(create_app(Settings("google", 2027, token="a"*32), NoAccess()))
+def test_real_mode_allows_writes_without_admin_token():
+    from app.repositories.mock_repository import MockRepository
+
+    client = TestClient(create_app(Settings("google", 2027), MockRepository(2027)))
     result = client.post("/api/events", json={"date": "2027-02-12", "town": "GERNIKA"})
-    assert result.status_code == 401
-    assert result.headers["WWW-Authenticate"] == "Bearer"
+    assert result.status_code == 201
+    assert result.json()["event"]["values"][1] == "GERNIKA"
     assert client.post("/api/demo/reset").status_code == 404
 
 

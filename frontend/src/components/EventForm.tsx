@@ -18,6 +18,7 @@ export function EventForm({
   config,
   columns,
   target,
+  initialDate,
   deleting,
   deleted,
   close,
@@ -26,15 +27,12 @@ export function EventForm({
   config: Config;
   columns: string[];
   target?: EventRow;
+  initialDate?: string;
   deleting: boolean;
   deleted: (table: Table) => void;
   close: () => void;
   saved: (result: SaveResult) => void;
 }) {
-  const localWrites = import.meta.env.DEV &&
-    import.meta.env.VITE_LOCAL_WRITES === true &&
-    location.hostname === "127.0.0.1" &&
-    !import.meta.env.VITE_API_URL;
   const [openedAt] = useState(() => new Date());
   const pad = (value: number) => String(value).padStart(2, "0");
   const firstDate = config.year + "-01-01";
@@ -62,12 +60,11 @@ export function EventForm({
     e.preventDefault();
     if (busy) return;
     const data = new FormData(e.currentTarget);
-    const token = String(data.get("token") || "");
     setBusy(true);
     setError("");
     try {
       if (deleting && target) {
-        deleted(await deleteEvent(target.id, target.values, token));
+        deleted(await deleteEvent(target.id, target.values));
         return;
       }
       const customDescription = String(data.get("customDescription") ?? "").trim();
@@ -91,8 +88,8 @@ export function EventForm({
       );
       const input = { date: String(data.get("date")), town: String(data.get("town")), fields };
       saved(target
-        ? await updateEvent(target.id, target.values, input, token)
-        : await createEvent(input, token));
+        ? await updateEvent(target.id, target.values, input)
+        : await createEvent(input));
     } catch (err) {
       setError(err instanceof Error ? err.message : t.failed);
     } finally {
@@ -129,7 +126,7 @@ export function EventForm({
               autoFocus
               name="date"
               type="date"
-              defaultValue={target?.date ?? defaultDate}
+              defaultValue={target?.date ?? initialDate ?? defaultDate}
               min={firstDate}
               max={lastDate}
               required
@@ -197,12 +194,7 @@ export function EventForm({
             );
           })}
           </>}
-          {config.source !== "mock" && !localWrites && (
-            <label>
-              {t.token}
-              <input type="password" name="token" required autoComplete="off" />
-            </label>
-          )}
+
         </fieldset>
         {error && (
           <p className="error" role="alert">

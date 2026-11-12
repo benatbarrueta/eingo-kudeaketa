@@ -7,7 +7,7 @@
 5. Guarda el JSON fuera del repositorio, en una ruta local accesible solo para el usuario que ejecuta el backend. No lo pegues en la web ni lo compartas por chat.
 6. En Google Docs, abre **la copia de pruebas**. Compártela como **Editor** con el correo `client_email` de la cuenta de servicio. No compartas el original con esa cuenta.
 7. Copia el identificador entre `/document/d/` y `/edit` de la URL de la copia. Si hay varias pestañas, abre la del calendario y toma el valor de `tab` de su URL. El índice de tabla empieza en cero y cuenta las tablas de nivel superior del cuerpo de esa pestaña.
-8. Configura `backend/.env`. Genera el token administrativo localmente con `openssl rand -hex 32` y guarda su resultado en el archivo.
+8. Configura `backend/.env` con los identificadores y la ruta a las credenciales.
 
    ```dotenv
    APP_ENV=development
@@ -17,7 +17,6 @@
    GOOGLE_TAB_ID=
    GOOGLE_TABLE_INDEX=0
    GOOGLE_CREDENTIALS_PATH=/ruta/privada/cuenta-de-servicio.json
-   ADMIN_TOKEN=
    FRONTEND_ORIGIN=http://127.0.0.1:5173
    ```
 
@@ -25,7 +24,7 @@
 
 9. Arranca FastAPI. Abre [el estado](http://127.0.0.1:8000/api/document/status) y confirma que `source` es `google` y `connected` es `true`. Si falla, comprueba la API habilitada, la ruta, el ID, la pestaña y el permiso Editor.
 10. Abre [la estructura](http://127.0.0.1:8000/api/document/structure). Compara encabezados, columnas adicionales, fechas y separadores con la copia. Si aparecen filas `unknown`, revisa su contenido, estilo o celdas combinadas antes de probar la escritura.
-11. Arranca Vite y comprueba que la cabecera muestra **Google Docs konektatuta**. Añade desde **Ekitaldia gehitu** un evento identificable en un mes con bloque. Elige una fecha anterior a algún evento de ese mes y usa el token administrativo. Espera la confirmación de la web.
+11. Arranca Vite y comprueba que la cabecera muestra **Google Docs konektatuta**. Añade desde **Ekitaldia gehitu** un evento identificable en un mes con bloque. Elige una fecha anterior a algún evento de ese mes. Espera la confirmación de la web.
 12. Abre **Dokumentua → Ireki Google Docs-en** y comprueba en la copia real que solo se añadió una fila, que la fecha está en euskera, que se insertó en el lugar correcto y que los separadores, filas anteriores, encabezado, bordes y anchos mantienen su aspecto. Repite el mismo alta para comprobar que no se duplica. Si es necesario, elimina manualmente la fila de prueba desde la copia.
 
 La integración usa [documents.get](https://developers.google.com/workspace/docs/api/reference/rest/v1/documents/get) y [documents.batchUpdate con WriteControl](https://developers.google.com/workspace/docs/api/reference/rest/v1/documents/batchUpdate). La escritura inserta con [insertTableRow y rellena con insertText](https://developers.google.com/workspace/docs/api/reference/rest/v1/documents/request); entre ambas operaciones se vuelve a leer el documento para comprobar la revisión y obtener los índices nuevos.

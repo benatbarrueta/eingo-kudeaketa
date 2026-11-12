@@ -1,19 +1,9 @@
 .layout {
-  display: grid;
-  grid-template-columns: 232px minmax(0, 1fr);
   min-height: 100dvh;
 }
 
-.sidebar {
-  background: white;
-  border-right: 1px solid var(--line);
-  padding: 28px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
-  position: sticky;
-  top: 0;
-  height: 100dvh;
+.workspace {
+  min-width: 0;
 }
 
 .brand {
@@ -47,58 +37,10 @@
   color: white;
 }
 
-.sideLabel,
-.source span,
 .eyebrow {
-  font-size: 0.69rem;
+  font-size: .69rem;
   font-weight: 750;
-  letter-spacing: 0.12em;
-}
-
-.sideLabel {
-  color: var(--muted);
-  padding: 18px 12px 0;
-}
-
-.sidebar nav {
-  display: grid;
-  gap: 5px;
-  margin-top: -15px;
-}
-
-.sidebar nav a {
-  display: flex;
-  gap: 11px;
-  align-items: center;
-  padding: 12px;
-  color: var(--muted);
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 620;
-}
-
-.sidebar nav a:hover,
-.sidebar nav .selected {
-  color: #204fbf;
-  background: #eaf0ff;
-}
-
-.source {
-  margin-top: auto;
-  border: 1px solid var(--line);
-  background: #f7f9fd;
-  padding: 13px;
-  border-radius: 10px;
-}
-
-.source span {
-  display: block;
-  color: var(--muted);
-  margin-bottom: 6px;
-}
-
-.source strong {
-  font-size: 0.78rem;
+  letter-spacing: .12em;
 }
 
 .connection,
@@ -160,6 +102,7 @@ main {
   padding: clamp(16px, 4vw, 44px);
   max-width: 1340px;
   margin: auto;
+  width: 100%;
 }
 
 .card {
@@ -212,63 +155,49 @@ main {
   color: #8a2724;
 }
 
-@media (max-width: 840px) {
-  .layout {
-    grid-template-columns: 178px minmax(0, 1fr);
-  }
-
-  .sidebar {
-    padding-inline: 12px;
-  }
-}
-
 @media (max-width: 620px) {
-  .layout {
-    display: block;
-  }
-
-  .sidebar {
-    position: static;
-    height: auto;
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-    padding: 10px 13px;
-    gap: 10px;
-  }
-
-  .sidebar nav {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0;
-    gap: 2px;
-  }
-
-  .sidebar nav a {
-    padding: 8px;
-    font-size: 0.79rem;
-  }
-
-  .sidebar nav svg {
-    width: 15px;
-  }
-
-  .sideLabel,
-  .source {
-    display: none;
-  }
-
   .connection,
   .year {
     padding: 5px 7px;
-    font-size: 0.66rem;
+    font-size: .66rem;
   }
 
   .primary {
     padding: 8px;
-    font-size: 0.76rem;
+    font-size: .76rem;
   }
 
   .panel {
     padding: 13px;
+  }
+}
+
+.pageActions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filePageHeader {
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.filePageHeader .secondary {
+  min-height: 42px;
+}
+
+.filePageHeader .secondary svg {
+  flex-shrink: 0;
+}
+
+@media (max-width: 620px) {
+  .filePageHeader {
+    align-items: flex-start;
+  }
+
+  .filePageHeader .pageActions {
+    width: 100%;
   }
 }
