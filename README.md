@@ -1,6 +1,10 @@
 # EINGO Kudeaketa
 
-Agenda web en euskera para consultar e insertar eventos en una **tabla de Google Docs**. React y TypeScript sirven la interfaz; FastAPI aplica las reglas de calendario y escribe mediante Google Docs API v1. No hay base de datos. El modo demo usa datos en memoria y funciona sin una cuenta de Google.
+Aplicación web en euskera para la **gestión de EINGO**, tanto de sus **bolos y actuaciones** como de su **escuela**.
+
+La versión actual permite gestionar la agenda de bolos, con altas, edición y eliminación de eventos, fechas en euskera y sincronización entre Google Sheets y Google Docs. La gestión de la escuela forma parte del alcance previsto del proyecto y está pendiente de desarrollo.
+
+React y TypeScript ofrecen la interfaz y FastAPI gestiona las operaciones y la integración con Google Workspace. Sheets conserva los datos completos y Docs presenta las columnas compartidas. El modo demo funciona con datos de ejemplo en memoria.
 
 ## Arranque local
 
