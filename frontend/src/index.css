@@ -1,8 +1,11 @@
 :root {
   font-family: "Inter Variable", Inter, system-ui, sans-serif;
-  color: #172540;
-  background: #f5f7fb;
+  color: var(--text);
+  background: var(--page);
   font-synthesis: none;
+  color-scheme: light;
+  --text: #172540;
+  --page: #f5f7fb;
   --blue: #2357d7;
   --line: #e2e8f2;
   --muted: #53637e;
@@ -77,10 +80,40 @@ h2 {
 
 input,
 select {
-  border: 1px solid #c9d5e8;
+  border: 1px solid var(--border, #c9d5e8);
   padding: 9px 11px;
   border-radius: 8px;
-  background: white;
+  background: var(--surface, white);
   color: inherit;
   min-width: 0;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --text: #e4ecf9;
+  --page: #101827;
+  --line: #30415a;
+  --muted: #adbbd0;
+  --shadow: 0 4px 16px #00000024;
+  --surface: #182337;
+  --surface-soft: #202e44;
+  --accent-soft: #223758;
+  --accent-hover: #2c466e;
+  --accent-text: #9bbcff;
+  --secondary-text: #c6d4eb;
+  --border: #35465f;
+  --success-bg: #193e35;
+  --success-text: #8bdfb4;
+  --error-bg: #482c38;
+  --error-text: #ffabb2;
+  --doc-heading: #294568;
+  --doc-separator: #43516a;
+  --doc-unknown: #453c28;
+  --doc-border: #566783;
+}
+
+dialog,
+form textarea {
+  background: var(--surface, white);
+  color: inherit;
 }

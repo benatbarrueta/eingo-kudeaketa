@@ -1,5 +1,5 @@
 .app-header {
-  background: white;
+  background: var(--surface, white);
   border-bottom: 1px solid var(--line);
   padding: 18px clamp(16px, 4vw, 44px) 0;
 }
@@ -51,7 +51,7 @@
 
 .navLink:hover {
   color: var(--blue);
-  background: #f4f7ff;
+  background: var(--accent-soft, #f4f7ff);
 }
 
 .navLink.selected {

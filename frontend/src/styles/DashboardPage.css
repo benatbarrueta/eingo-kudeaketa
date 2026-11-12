@@ -48,8 +48,8 @@
 }
 
 .statIcon {
-  background: #eaf0ff;
-  color: #2357d7;
+  background: var(--accent-soft, #eaf0ff);
+  color: var(--accent-text, #2357d7);
 }
 
 .statValue {
@@ -75,8 +75,8 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  color: #304466;
-  background: #eef3fb;
+  color: var(--secondary-text, #304466);
+  background: var(--surface-soft, #eef3fb);
   border-radius: 18px;
   padding: 6px 10px;
   font-size: 0.78rem;

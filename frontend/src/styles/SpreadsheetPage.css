@@ -32,8 +32,8 @@
 }
 
 .spreadsheetTable thead th {
-  background: #eaf4ef;
-  color: #235d43;
+  background: var(--success-bg, #eaf4ef);
+  color: var(--success-text, #235d43);
   font-size: .73rem;
   letter-spacing: .04em;
 }
@@ -42,11 +42,11 @@
   min-width: 45px;
   width: 45px;
   text-align: center;
-  background: #f7f9fc;
+  background: var(--surface-soft, #f7f9fc);
   color: var(--muted);
   font-weight: 500;
 }
 
 .spreadsheetTable tbody tr:hover td {
-  background: #f7faff;
+  background: var(--accent-soft, #f7faff);
 }

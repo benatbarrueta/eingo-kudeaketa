@@ -1,6 +1,7 @@
 import { CalendarDays, CalendarRange, FileSpreadsheet, FileText, LayoutDashboard, List, Plus } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
 import type { Config } from "../types/calendar";
+import { useTheme } from "../hooks/useTheme";
 import { t } from "../lib/labels";
 import "../styles/AppHeader.css";
 
@@ -20,6 +21,7 @@ interface AppHeaderProps {
 }
 
 export function AppHeader({ config, connected, canAdd, onAdd }: AppHeaderProps) {
+  useTheme();
   const status = config?.source === "mock" ? t.demo
     : !connected ? t.disconnected
     : config?.source === "sheets" ? t.sheetsConnected : t.connected;

@@ -9,7 +9,7 @@
   align-items: center;
   gap: 13px;
   padding: 11px 6px;
-  border-top: 1px solid #edf0f6;
+  border-top: 1px solid var(--border, #edf0f6);
   overflow-wrap: anywhere;
 }
 
@@ -19,8 +19,8 @@
   min-width: 47px;
   padding: 5px;
   border-radius: 8px;
-  background: #eef3ff;
-  color: #244dad;
+  background: var(--accent-soft, #eef3ff);
+  color: var(--accent-text, #244dad);
   flex: none;
 }
 
@@ -68,5 +68,5 @@
 }
 
 .eventActions .eventActionDelete {
-  color: #b42318;
+  color: var(--error-text, #b42318);
 }

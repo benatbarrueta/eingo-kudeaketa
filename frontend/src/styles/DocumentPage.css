@@ -13,22 +13,22 @@ table {
 th,
 td {
   padding: 10px 12px;
-  border: 1px solid #182235;
+  border: 1px solid var(--doc-border, #182235);
   white-space: pre-wrap;
   min-width: 110px;
 }
 
 th {
-  background: #bdd9fa;
+  background: var(--doc-heading, #bdd9fa);
 }
 
 .separator td {
-  background: #bfc3ca;
+  background: var(--doc-separator, #bfc3ca);
   padding: 2px;
 }
 
 .unknown td {
-  background: #fff4dd;
+  background: var(--doc-unknown, #fff4dd);
 }
 
 @media (max-width: 620px) {

@@ -40,7 +40,7 @@ input[type="date"] {
 
 form textarea {
   font: inherit;
-  border: 1px solid #c9d5e8;
+  border: 1px solid var(--border, #c9d5e8);
   border-radius: 8px;
   padding: 9px 11px;
   resize: vertical;
