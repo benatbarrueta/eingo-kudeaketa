@@ -18,7 +18,7 @@ import { DocumentPage } from "./pages/DocumentPage";
 import { EventsPage } from "./pages/EventsPage";
 import { resetDemo, importDocument, synchronizeDocument } from "./api/calendar";
 import type { EventRow, SaveResult, Table } from "./types/calendar";
-import { t } from "./lib/labels";
+import { useLabels } from "./lib/labels";
 import "./styles/App.css";
 
 export default function App() {
@@ -30,6 +30,7 @@ export default function App() {
 }
 
 function AppRoutes() {
+  const { t, message } = useLabels();
   const navigate = useNavigate();
   const { changes, storageError, syncStatus, config, table, setTable, loading, error, refresh } = useCalendar();
   const [formOpen, setFormOpen] = useState(false);
@@ -127,19 +128,19 @@ function AppRoutes() {
           {notice && (
             <div className="notice" role="status">
               <CircleCheck size={18} />
-              {notice}
+              {message(notice)}
             </div>
           )}
           {actionError && (
             <p className="error" role="alert">
-              {actionError}
+              {message(actionError)}
             </p>
           )}
           {loading && <p role="status">{t.loading}</p>}
           {!loading && error && (
             <div className="card panel">
               <p className="error" role="alert">
-                {error}
+                {message(error)}
               </p>
               <button className="secondary" onClick={() => void refresh()}>
                 {t.retry}

@@ -1,6 +1,6 @@
 import { Search } from "lucide-react";
 import type { EventRow, Table } from "../types/calendar";
-import { months, t } from "../lib/labels";
+import { useLabels } from "../lib/labels";
 import { eventMonth } from "../lib/calendar";
 import { EventList } from "../components/EventList";
 import { useState } from "react";
@@ -19,6 +19,7 @@ export function EventsPage({
   onEdit?: (event: EventRow) => void;
   onDelete?: (event: EventRow) => void;
 }) {
+  const { t, months } = useLabels();
   const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
   const town = table.columns.indexOf("HERRIA");

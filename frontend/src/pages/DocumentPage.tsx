@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getDocumentPreview } from "../api/calendar";
 import { FilePageHeader } from "../components/FilePageHeader";
 import type { Config, Table } from "../types/calendar";
-import { t } from "../lib/labels";
+import { useLabels } from "../lib/labels";
 import "../styles/DocumentPage.css";
 
 export function DocumentPage({
@@ -20,6 +20,7 @@ export function DocumentPage({
   busy: boolean;
   onSynchronize: () => void;
 }) {
+  const { t, columnLabel, message } = useLabels();
   const [document, setDocument] = useState<Table>();
   const [error, setError] = useState("");
   useEffect(() => {
@@ -47,7 +48,7 @@ export function DocumentPage({
       {config.source === "mock" && (
         <button className="secondary" disabled={busy} onClick={reset}>{t.reset}</button>
       )}
-      {error && <p role="alert" className="error">{error}</p>}
+      {error && <p role="alert" className="error">{message(error)}</p>}
       {!table && !error && <p role="status">{t.loading}</p>}
       {table?.rows.some((r) => r.kind === "unknown") && (
         <p className="error" role="status">
@@ -65,7 +66,7 @@ export function DocumentPage({
             <tr>
               {table.columns.map((c) => (
                 <th key={c} scope="col">
-                  {c}
+                  {columnLabel(c)}
                 </th>
               ))}
             </tr>

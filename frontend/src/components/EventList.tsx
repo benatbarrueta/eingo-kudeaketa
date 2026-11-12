@@ -1,6 +1,6 @@
 import { Pencil, Trash2 } from "lucide-react";
 import type { EventRow } from "../types/calendar";
-import { months, t } from "../lib/labels";
+import { useLabels } from "../lib/labels";
 import { eventMonth } from "../lib/calendar";
 import "../styles/EventList.css";
 
@@ -17,6 +17,7 @@ export function EventList({
   onEdit?: (event: EventRow) => void;
   onDelete?: (event: EventRow) => void;
 }) {
+  const { t, months, columnLabel } = useLabels();
   const town = columns.indexOf("HERRIA");
   return (
     <ul className="eventList">
@@ -33,7 +34,7 @@ export function EventList({
                 c !== "DATA" && i !== town
                   ? [
                       <span key={c}>
-                        {c}: {e.values[i] || "—"}
+                        {columnLabel(c)}: {e.values[i] || "—"}
                       </span>,
                     ]
                   : [],

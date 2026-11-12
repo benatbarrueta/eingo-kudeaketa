@@ -1,5 +1,5 @@
 import { ExternalLink, RefreshCw } from "lucide-react";
-import { t } from "../lib/labels";
+import { useLabels } from "../lib/labels";
 
 interface FilePageHeaderProps {
   title: string;
@@ -14,6 +14,7 @@ interface FilePageHeaderProps {
 export function FilePageHeader({
   title, description, url, openLabel, canSynchronize, busy, onSynchronize,
 }: FilePageHeaderProps) {
+  const { t } = useLabels();
   return (
     <div className="panelHead filePageHeader">
       <div><h1>{title}</h1><p className="muted">{description}</p></div>

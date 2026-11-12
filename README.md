@@ -136,3 +136,7 @@ Las comprobaciones usan permisos de lectura del repositorio y datos de prueba lo
 Al abrir la web o volver a una pestaña que estaba oculta se solicita la sincronización de Sheets y Docs antes de cargar los datos. Si falla, se muestra el error y se puede reintentar. El backend debe estar encendido.
 
 La web compara los eventos con la última copia vista en ese navegador y muestra altas, bajas y campos modificados. La primera visita establece la referencia; no depende de que el backend haya estado apagado. La copia se guarda en el almacenamiento local del navegador e incluye los datos de los eventos. Al borrar ese almacenamiento o cambiar de navegador se pierde la referencia. Se muestran diferencias finales, sin atribuir autores ni reconstruir ediciones intermedias. Un cambio de fecha o de localidad puede aparecer como baja y alta.
+
+### Idiomas del frontend
+
+La interfaz usa i18next y react-i18next, con euskera (`eu`) como idioma inicial y castellano (`es`) seleccionable en la cabecera. La preferencia se guarda en `localStorage` (`eingo.language`); si el almacenamiento está bloqueado, el cambio sigue funcionando durante la visita. Los catálogos están en `frontend/src/lib/locales/`. El idioma actual también actualiza `html.lang` y el título de la página. Las claves de columnas, los valores de los eventos y los archivos de Google conservan su contenido original.

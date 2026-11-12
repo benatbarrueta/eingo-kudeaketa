@@ -1,6 +1,6 @@
 import { FilePageHeader } from "../components/FilePageHeader";
 import type { Config, Table } from "../types/calendar";
-import { t } from "../lib/labels";
+import { useLabels } from "../lib/labels";
 import "../styles/SpreadsheetPage.css";
 
 export function SpreadsheetPage({ table, config, highlight, busy, onImport, onSynchronize }: {
@@ -11,6 +11,7 @@ export function SpreadsheetPage({ table, config, highlight, busy, onImport, onSy
   onImport: () => void;
   onSynchronize: () => void;
 }) {
+  const { t, columnLabel } = useLabels();
   const rows = table.rows.map((row, id) => ({ ...row, id })).filter((row) => row.kind === "event");
 
   return (
@@ -34,7 +35,7 @@ export function SpreadsheetPage({ table, config, highlight, busy, onImport, onSy
           <thead>
             <tr>
               <th scope="col" className="rowNumber">#</th>
-              {table.columns.map((column) => <th scope="col" key={column}>{column}</th>)}
+              {table.columns.map((column) => <th scope="col" key={column}>{columnLabel(column)}</th>)}
             </tr>
           </thead>
           <tbody>
