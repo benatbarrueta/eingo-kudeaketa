@@ -1,0 +1,274 @@
+.layout {
+  display: grid;
+  grid-template-columns: 232px minmax(0, 1fr);
+  min-height: 100dvh;
+}
+
+.sidebar {
+  background: white;
+  border-right: 1px solid var(--line);
+  padding: 28px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 0 8px;
+}
+
+.brand small {
+  display: block;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.68rem;
+  letter-spacing: 0;
+  margin-top: 3px;
+}
+
+.brandIcon,
+.statIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: var(--blue);
+  color: white;
+}
+
+.sideLabel,
+.source span,
+.eyebrow {
+  font-size: 0.69rem;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+}
+
+.sideLabel {
+  color: var(--muted);
+  padding: 18px 12px 0;
+}
+
+.sidebar nav {
+  display: grid;
+  gap: 5px;
+  margin-top: -15px;
+}
+
+.sidebar nav a {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  padding: 12px;
+  color: var(--muted);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 620;
+}
+
+.sidebar nav a:hover,
+.sidebar nav .selected {
+  color: #204fbf;
+  background: #eaf0ff;
+}
+
+.source {
+  margin-top: auto;
+  border: 1px solid var(--line);
+  background: #f7f9fd;
+  padding: 13px;
+  border-radius: 10px;
+}
+
+.source span {
+  display: block;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.source strong {
+  font-size: 0.78rem;
+}
+
+.connection,
+.year,
+.badge {
+  border-radius: 20px;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  font-weight: 670;
+  background: #eef3fb;
+  color: #304466;
+  white-space: nowrap;
+}
+
+.primary,
+.secondary,
+.linkButton,
+.iconButton {
+  border-radius: 8px;
+  font-weight: 680;
+  font-size: 0.85rem;
+  justify-content: center;
+}
+
+.primary {
+  padding: 10px 14px;
+  color: white;
+  background: var(--blue);
+  border: 1px solid transparent;
+  box-shadow: 0 2px 4px #1742ac22;
+}
+
+.primary:hover:not(:disabled) {
+  background: #1b45b2;
+}
+
+.secondary {
+  background: white;
+  border: 1px solid #ccd8ec;
+  color: #254479;
+  padding: 9px 13px;
+}
+
+.linkButton,
+.iconButton {
+  background: none;
+  border: 0;
+  color: #204fbd;
+  padding: 7px;
+}
+
+.secondary:hover,
+.linkButton:hover,
+.iconButton:hover {
+  background: #eef3ff;
+}
+
+main {
+  padding: clamp(16px, 4vw, 44px);
+  max-width: 1340px;
+  margin: auto;
+}
+
+.card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.panel {
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.panelHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.panelHead p {
+  margin-top: 6px;
+}
+
+.highlight {
+  background: #e6efff !important;
+}
+
+.notice,
+.error {
+  padding: 11px 13px;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  line-height: 1.45;
+}
+
+.notice {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: #e7f8ed;
+  color: #145738;
+}
+
+.error {
+  background: #fceeed;
+  color: #8a2724;
+}
+
+@media (max-width: 840px) {
+  .layout {
+    grid-template-columns: 178px minmax(0, 1fr);
+  }
+
+  .sidebar {
+    padding-inline: 12px;
+  }
+}
+
+@media (max-width: 620px) {
+  .layout {
+    display: block;
+  }
+
+  .sidebar {
+    position: static;
+    height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 10px 13px;
+    gap: 10px;
+  }
+
+  .sidebar nav {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    gap: 2px;
+  }
+
+  .sidebar nav a {
+    padding: 8px;
+    font-size: 0.79rem;
+  }
+
+  .sidebar nav svg {
+    width: 15px;
+  }
+
+  .sideLabel,
+  .source {
+    display: none;
+  }
+
+  .connection,
+  .year {
+    padding: 5px 7px;
+    font-size: 0.66rem;
+  }
+
+  .primary {
+    padding: 8px;
+    font-size: 0.76rem;
+  }
+
+  .panel {
+    padding: 13px;
+  }
+}

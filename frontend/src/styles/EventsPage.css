@@ -1,0 +1,22 @@
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 16px 0;
+}
+
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--muted);
+}
+
+.search svg {
+  position: absolute;
+  left: 10px;
+}
+
+.search input {
+  padding-left: 35px;
+}

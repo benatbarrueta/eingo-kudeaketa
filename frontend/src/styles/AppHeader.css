@@ -1,0 +1,62 @@
+.app-header {
+  min-height: 76px;
+  background: white;
+  border-bottom: 1px solid var(--line);
+  padding: 12px clamp(16px, 4vw, 44px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.headerName {
+  font-size: 0.93rem;
+  font-weight: 690;
+}
+
+.headerActions,
+.connection,
+.primary,
+.secondary,
+.linkButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.headerActions {
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.connection i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #19865e;
+}
+
+.connection.offline i {
+  background: #b23b39;
+}
+
+@media (max-width: 840px) {
+  .headerName {
+    display: none;
+  }
+
+  .app-header {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 620px) {
+  .app-header {
+    justify-content: flex-start;
+    min-height: auto;
+  }
+
+  .headerActions {
+    gap: 6px;
+  }
+}

@@ -1,0 +1,38 @@
+.sheet {
+  overflow: auto;
+  padding: 16px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+  font-size: 0.88rem;
+}
+
+th,
+td {
+  padding: 10px 12px;
+  border: 1px solid #182235;
+  white-space: pre-wrap;
+  min-width: 110px;
+}
+
+th {
+  background: #bdd9fa;
+}
+
+.separator td {
+  background: #bfc3ca;
+  padding: 2px;
+}
+
+.unknown td {
+  background: #fff4dd;
+}
+
+@media (max-width: 620px) {
+  .documentHead {
+    align-items: flex-start;
+  }
+}

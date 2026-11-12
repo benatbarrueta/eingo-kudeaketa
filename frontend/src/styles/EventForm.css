@@ -1,0 +1,57 @@
+dialog {
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  padding: 22px;
+  width: min(480px, calc(100% - 24px));
+  max-height: calc(100dvh - 24px);
+  color: inherit;
+  box-shadow: 0 18px 50px #14254736;
+}
+
+dialog::backdrop {
+  background: #14254775;
+}
+
+fieldset {
+  padding: 0;
+  border: 0;
+  margin: 16px 0;
+  display: grid;
+  gap: 11px;
+  min-width: 0;
+}
+
+form label {
+  display: grid;
+  gap: 5px;
+  font-size: 0.85rem;
+  font-weight: 650;
+}
+
+input[type="date"] {
+  max-width: 100%;
+}
+
+.formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+form textarea {
+  font: inherit;
+  border: 1px solid #c9d5e8;
+  border-radius: 8px;
+  padding: 9px 11px;
+  resize: vertical;
+}
+
+.primary.danger,
+.primary.danger:hover:not(:disabled) {
+  background: #a52b2b;
+}
+
+.descriptionFields {
+  display: grid;
+  gap: 11px;
+}
