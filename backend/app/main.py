@@ -84,7 +84,7 @@ def create_app(settings=None, repo=None):
     async def invalid_input(request: Request, exc: RequestValidationError):
         return JSONResponse({"error": {"code": "validation_error"}}, status_code=422)
 
-    app.include_router(router(settings, service, WriteGuard(settings)))
+    app.include_router(router(settings, service, WriteGuard()))
     return app
 
 

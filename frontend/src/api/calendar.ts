@@ -9,10 +9,9 @@ export function getDocumentStructure() {
   return apiRequest<Table>("/api/calendar");
 }
 
-export function createEvent(input: EventInput, token: string) {
+export function createEvent(input: EventInput) {
   return apiRequest<SaveResult>("/api/events", {
     method: "POST",
-    headers: token ? { Authorization: "Bearer " + token } : undefined,
     body: JSON.stringify(input),
   });
 }
@@ -21,18 +20,16 @@ export function resetDemo() {
   return apiRequest<{ ok: boolean }>("/api/demo/reset", { method: "POST" });
 }
 
-export function updateEvent(id: number, expected: string[], input: EventInput, token: string) {
+export function updateEvent(id: number, expected: string[], input: EventInput) {
   return apiRequest<SaveResult>(`/api/events/${id}/edit`, {
     method: "POST",
-    headers: token ? { Authorization: "Bearer " + token } : undefined,
     body: JSON.stringify({ ...input, expected }),
   });
 }
 
-export function deleteEvent(id: number, expected: string[], token: string) {
+export function deleteEvent(id: number, expected: string[]) {
   return apiRequest<Table>(`/api/events/${id}/delete`, {
     method: "POST",
-    headers: token ? { Authorization: "Bearer " + token } : undefined,
     body: JSON.stringify({ expected }),
   });
 }
@@ -42,17 +39,15 @@ export function getDocumentPreview() {
   return apiRequest<Table>("/api/document/structure");
 }
 
-export function importDocument(token: string) {
+export function importDocument() {
   return apiRequest<Table>("/api/sheets/import-document", {
     method: "POST",
-    headers: token ? { Authorization: "Bearer " + token } : undefined,
   });
 }
 
-export function synchronizeDocument(token: string) {
+export function synchronizeDocument() {
   return apiRequest<Table>("/api/document/sync", {
     method: "POST",
-    headers: token ? { Authorization: "Bearer " + token } : undefined,
   });
 }
 

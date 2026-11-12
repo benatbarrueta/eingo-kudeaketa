@@ -1,0 +1,52 @@
+.spreadsheetView {
+  margin-top: 18px;
+  overflow-x: auto;
+}
+
+.spreadsheetTable {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  text-align: left;
+  font-size: .84rem;
+}
+
+.spreadsheetTable caption {
+  text-align: left;
+  padding: 14px 16px;
+  font-weight: 650;
+  color: var(--muted);
+}
+
+.spreadsheetTable th,
+.spreadsheetTable td {
+  padding: 13px 15px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  min-width: 120px;
+  max-width: 300px;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+  vertical-align: top;
+}
+
+.spreadsheetTable thead th {
+  background: #eaf4ef;
+  color: #235d43;
+  font-size: .73rem;
+  letter-spacing: .04em;
+}
+
+.spreadsheetTable .rowNumber {
+  min-width: 45px;
+  width: 45px;
+  text-align: center;
+  background: #f7f9fc;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.spreadsheetTable tbody tr:hover td {
+  background: #f7faff;
+}

@@ -14,7 +14,6 @@ const errorMessages: Record<string, string> = {
   month_without_block: t.monthMissing,
   revision_conflict: t.conflict,
   manual_review: t.manual,
-  admin_required: t.unauthorized,
   unsafe_structure: t.unsafe,
   rate_limited: t.rate,
   validation_error: t.invalid,

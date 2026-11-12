@@ -7,11 +7,13 @@ import {
   useNavigate,
 } from "react-router-dom";
 import { CircleCheck } from "lucide-react";
+import { VisitChanges } from "./components/VisitChanges";
 import { AppHeader } from "./components/AppHeader";
-import { AppSidebar } from "./components/AppSidebar";
 import { EventForm } from "./components/EventForm";
 import { useCalendar } from "./hooks/useCalendar";
 import { DashboardPage } from "./pages/DashboardPage";
+import { CalendarPage } from "./pages/CalendarPage";
+import { SpreadsheetPage } from "./pages/SpreadsheetPage";
 import { DocumentPage } from "./pages/DocumentPage";
 import { EventsPage } from "./pages/EventsPage";
 import { resetDemo, importDocument, synchronizeDocument } from "./api/calendar";
@@ -29,8 +31,9 @@ export default function App() {
 
 function AppRoutes() {
   const navigate = useNavigate();
-  const { syncStatus, config, table, setTable, loading, error, refresh } = useCalendar();
+  const { changes, storageError, syncStatus, config, table, setTable, loading, error, refresh } = useCalendar();
   const [formOpen, setFormOpen] = useState(false);
+  const [initialDate, setInitialDate] = useState<string>();
   const [target, setTarget] = useState<EventRow>();
   const [deleting, setDeleting] = useState(false);
   const [notice, setNotice] = useState("");
@@ -45,7 +48,8 @@ function AppRoutes() {
     }) ?? [];
   events.sort((a, b) => a.date.localeCompare(b.date));
 
-  function openForm(event?: EventRow, remove = false) {
+  function openForm(event?: EventRow, remove = false, date?: string) {
+    setInitialDate(date);
     setTarget(event);
     setDeleting(remove);
     setNotice("");
@@ -71,17 +75,12 @@ function AppRoutes() {
   async function runSheetsAction(importing: boolean) {
     if (resetting) return;
     if (importing && !window.confirm(t.importConfirm)) return;
-    const localWrites = import.meta.env.DEV &&
-      import.meta.env.VITE_LOCAL_WRITES === true &&
-      location.hostname === "127.0.0.1" && !import.meta.env.VITE_API_URL;
-    const token = localWrites ? "" : window.prompt(t.token);
-    if (token === null) return;
     setResetting(true);
     setActionError("");
     setNotice("");
     try {
-      if (importing) await importDocument(token);
-      else await synchronizeDocument(token);
+      if (importing) await importDocument();
+      else await synchronizeDocument();
       await refresh();
       setNotice(importing ? t.importDone : t.syncDone);
     } catch (cause) {
@@ -110,7 +109,6 @@ function AppRoutes() {
 
   return (
     <div className="layout">
-      <AppSidebar source={config?.source} />
       <div className="workspace">
         <AppHeader
           config={config}
@@ -119,13 +117,8 @@ function AppRoutes() {
           onAdd={() => openForm()}
         />
         <main>
-          {config?.source === "sheets" && (
-            <div className="panelHead">
-              {config.spreadsheetUrl && <a className="secondary" href={config.spreadsheetUrl} target="_blank" rel="noreferrer">Google Sheets ↗</a>}
-              <button className="secondary" disabled={resetting || loading} onClick={() => void runSheetsAction(true)}>{t.importDocument}</button>
-              <button className="secondary" disabled={resetting || loading} onClick={() => void runSheetsAction(false)}>{t.synchronize}</button>
-            </div>
-          )}
+          {storageError && <p className="error" role="status">{t.visitStorageError}</p>}
+          <VisitChanges changes={changes} />
           {syncStatus?.enabled && (
             <p className={syncStatus.error ? "error" : "muted"} role="status">
               {syncStatus.error ? t.syncConflict : t.autoSync}
@@ -155,6 +148,15 @@ function AppRoutes() {
           )}
           {!loading && !error && config && table && (
             <Routes>
+              <Route path="calendar" element={
+                <CalendarPage events={events} table={table} config={config}
+                  onEdit={openForm} onAdd={(date) => openForm(undefined, false, date)} />
+              } />
+              <Route path="spreadsheet" element={
+                <SpreadsheetPage table={table} config={config} highlight={highlight}
+                  busy={resetting} onImport={() => void runSheetsAction(true)}
+                  onSynchronize={() => void runSheetsAction(false)} />
+              } />
               <Route
                 index
                 element={
@@ -187,6 +189,8 @@ function AppRoutes() {
                     config={config}
                     highlight={highlight}
                     reset={() => void onReset()}
+                    busy={resetting}
+                    onSynchronize={() => void runSheetsAction(false)}
                   />
                 }
               />
@@ -200,6 +204,7 @@ function AppRoutes() {
           config={config}
           columns={table.columns}
           target={target}
+          initialDate={initialDate}
           deleting={deleting}
           deleted={onDeleted}
           close={() => setFormOpen(false)}

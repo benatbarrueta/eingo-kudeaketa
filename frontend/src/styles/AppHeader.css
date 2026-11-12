@@ -1,17 +1,16 @@
 .app-header {
-  min-height: 76px;
   background: white;
   border-bottom: 1px solid var(--line);
-  padding: 12px clamp(16px, 4vw, 44px);
+  padding: 18px clamp(16px, 4vw, 44px) 0;
+}
+
+.headerTop {
+  max-width: 1252px;
+  margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
-}
-
-.headerName {
-  font-size: 0.93rem;
-  font-weight: 690;
+  gap: 20px;
 }
 
 .headerActions,
@@ -25,8 +24,39 @@
 }
 
 .headerActions {
-  gap: 12px;
+  justify-content: flex-end;
   flex-wrap: wrap;
+  gap: 12px;
+}
+
+.headerNavigation {
+  max-width: 1252px;
+  margin: 18px auto 0;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  padding: 12px 15px;
+  border-bottom: 3px solid transparent;
+  color: var(--muted);
+  font-size: .88rem;
+  font-weight: 650;
+}
+
+.navLink:hover {
+  color: var(--blue);
+  background: #f4f7ff;
+}
+
+.navLink.selected {
+  color: var(--blue);
+  border-bottom-color: var(--blue);
 }
 
 .connection i {
@@ -40,23 +70,24 @@
   background: #b23b39;
 }
 
-@media (max-width: 840px) {
-  .headerName {
-    display: none;
-  }
-
-  .app-header {
-    justify-content: flex-end;
-  }
-}
-
-@media (max-width: 620px) {
-  .app-header {
-    justify-content: flex-start;
-    min-height: auto;
+@media (max-width: 760px) {
+  .headerTop {
+    flex-wrap: wrap;
+    gap: 14px;
   }
 
   .headerActions {
-    gap: 6px;
+    justify-content: flex-start;
+    gap: 8px;
+  }
+
+  .headerNavigation {
+    margin-top: 10px;
+    gap: 0;
+  }
+
+  .navLink {
+    padding: 11px 12px;
+    font-size: .8rem;
   }
 }

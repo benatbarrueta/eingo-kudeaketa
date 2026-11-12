@@ -1,0 +1,53 @@
+.visitChanges {
+  background: white;
+  border: 1px solid #dce5f3;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 3px 12px #19345c04;
+}
+.visitChangesHeader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  list-style: none;
+}
+.visitChangesHeader::-webkit-details-marker { display: none; }
+.visitChangesHeader:focus-visible { outline: 2px solid var(--blue); outline-offset: -3px; }
+.visitChangesIcon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 10px;
+  background: #eef3ff;
+  color: #2455c7;
+}
+.visitChangesHeading { flex: 1; font-size: .88rem; font-weight: 700; }
+.visitChangesSubtitle { display: block; margin-top: 3px; color: var(--muted); font-size: .76rem; font-weight: 400; }
+.visitChangesCount { background: #eef3ff; color: #2455c7; border-radius: 20px; padding: 3px 9px; font-size: .75rem; font-weight: 700; }
+.visitChangesChevron { color: var(--muted); flex: none; transition: transform .15s; }
+.visitChanges:not([open]) .visitChangesChevron { transform: rotate(-90deg); }
+.visitChangesList { list-style: none; padding: 0 20px; margin: 0; max-height: 320px; overflow-y: auto; }
+.visitChange { border-top: 1px solid #edf0f6; padding: 14px 0; }
+.visitChangeEvent { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; font-size: .82rem; }
+.visitChangeEvent time { color: var(--muted); font-size: .76rem; margin-left: auto; }
+.visitChangeKind { display: inline-flex; align-items: center; gap: 4px; border-radius: 5px; padding: 4px 7px; font-size: .68rem; font-weight: 650; }
+.visitChangeKind.updated { background: #edf3ff; color: #2453bb; }
+.visitChangeKind.added { background: #eaf7f0; color: #16744c; }
+.visitChangeKind.removed { background: #fff0f0; color: #b83d48; }
+.visitChangeFields { list-style: none; padding: 0; margin: 9px 0 0; display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.visitChangeFields li { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; font-size: .78rem; }
+.visitChangeFieldName { color: var(--muted); font-size: .66rem; font-weight: 650; letter-spacing: .035em; }
+.visitChangeBefore { color: #8c5260; background: #fff3f4; border-radius: 4px; padding: 3px 6px; overflow-wrap: anywhere; }
+.visitChangeAfter { color: #16744c; background: #edf8f1; border-radius: 4px; padding: 3px 6px; font-weight: 600; overflow-wrap: anywhere; }
+.visitChangeFields svg { color: #8996ab; flex: none; }
+@media (max-width: 600px) {
+  .visitChangesHeader { padding: 13px; gap: 9px; }
+  .visitChangesList { padding: 0 13px; }
+  .visitChangeEvent time { margin-left: 0; }
+  .visitChangesHeading { font-size: .8rem; }
+}
