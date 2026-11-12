@@ -141,6 +141,8 @@ El etiquetado utiliza la configuración de la rama base sin descargar ni ejecuta
 
 El workflow **PR assignment** asigna la PR a su autor al abrirla o reabrirla, conservando las demás personas asignadas. Omite las PR creadas por bots y no hace cambios si el autor ya está asignado. Utiliza únicamente metadatos de GitHub, sin descargar ni ejecutar código de la PR. Empezará a funcionar tras incorporar su workflow a `master`; no asigna retroactivamente las PR que ya estén abiertas.
 
+El check obligatorio **PR assignee** comprueba de forma independiente que la PR tenga al menos una persona asignada, también en las PR creadas por bots. Se ejecuta al abrir, reabrir, subir cambios, asignar o quitar personas y marcar la PR como lista para revisión. Consulta el estado actual en GitHub; al abrir o reabrir espera hasta un minuto para permitir que termine el autoasignado. Si se quita la última persona asignada, falla sin volver a asignarla automáticamente. Si el autoasignado termina después de ese margen, vuelve a ejecutar el check. El ruleset de `master` exige **PR assignee** para integrar la PR.
+
 ### Cambios desde la última visita
 
 Al abrir la web o volver a una pestaña que estaba oculta se solicita la sincronización de Sheets y Docs antes de cargar los datos. Si falla, se muestra el error y se puede reintentar. El backend debe estar encendido.
