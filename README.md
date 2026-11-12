@@ -139,6 +139,8 @@ El workflow **PR labels** usa [actions/labeler](https://github.com/actions/label
 
 El etiquetado utiliza la configuración de la rama base sin descargar ni ejecutar código de la PR. Empezará a funcionar una vez incorporado este workflow a `master`; la PR que lo introduce no ejecuta todavía el etiquetado automático.
 
+El workflow **PR assignment** asigna la PR a su autor al abrirla o reabrirla, conservando las demás personas asignadas. Omite las PR creadas por bots y no hace cambios si el autor ya está asignado. Utiliza únicamente metadatos de GitHub, sin descargar ni ejecutar código de la PR. Empezará a funcionar tras incorporar su workflow a `master`; no asigna retroactivamente las PR que ya estén abiertas.
+
 ### Cambios desde la última visita
 
 Al abrir la web o volver a una pestaña que estaba oculta se solicita la sincronización de Sheets y Docs antes de cargar los datos. Si falla, se muestra el error y se puede reintentar. El backend debe estar encendido.
