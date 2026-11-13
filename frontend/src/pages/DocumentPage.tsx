@@ -24,7 +24,7 @@ export function DocumentPage({
   const [document, setDocument] = useState<Table>();
   const [error, setError] = useState("");
   useEffect(() => {
-    if (config.source !== "sheets") return;
+    if (config.source !== "sheets" && config.source !== "database") return;
     let active = true;
     getDocumentPreview().then((result) => {
       if (active) setDocument(result);
@@ -33,7 +33,7 @@ export function DocumentPage({
     });
     return () => { active = false; };
   }, [config.source, sourceTable]);
-  const table = config.source === "sheets" ? document : sourceTable;
+  const table = config.source === "sheets" || config.source === "database" ? document : sourceTable;
   return (
     <>
       <FilePageHeader
@@ -41,7 +41,7 @@ export function DocumentPage({
         description={t.preview}
         url={config.documentUrl}
         openLabel={t.open}
-        canSynchronize={config.source === "sheets"}
+        canSynchronize={config.source === "sheets" || !!config.googleSync}
         busy={busy}
         onSynchronize={onSynchronize}
       />

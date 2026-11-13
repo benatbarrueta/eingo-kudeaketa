@@ -1,4 +1,4 @@
-export type EventRow = { id: number; date: string; values: string[] };
+export type EventRow = { id: number; date: string; values: string[]; eventId?: string | null; version?: number | null };
 export type Table = {
   title: string;
   columns: string[];
@@ -7,10 +7,13 @@ export type Table = {
     date: string | null;
     values: string[];
     spans?: number[];
+    eventId?: string | null;
+    version?: number | null;
   }[];
 };
 export type Config = {
-  source: "mock" | "google" | "sheets";
+  source: "mock" | "google" | "sheets" | "database";
+  googleSync?: boolean;
   year: number;
   documentUrl: string | null;
   spreadsheetUrl?: string | null;

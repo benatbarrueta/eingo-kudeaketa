@@ -8,6 +8,8 @@ class Event(BaseModel):
     id: int
     date: Date
     values: list[str]
+    eventId: str | None = None
+    version: int | None = None
 
 
 class TableRow(BaseModel):
@@ -15,6 +17,8 @@ class TableRow(BaseModel):
     values: list[str]
     spans: list[int] | None
     date: Date | None
+    eventId: str | None = None
+    version: int | None = None
 
 
 class Table(BaseModel):
@@ -37,13 +41,14 @@ class EventSaved(BaseModel):
 
 class Config(BaseModel):
     year: int
-    source: Literal["mock", "google", "sheets"]
+    source: Literal["mock", "google", "sheets", "database"]
+    googleSync: bool = False
     documentUrl: str | None
     spreadsheetUrl: str | None = None
 
 
 class DocumentStatus(BaseModel):
-    source: Literal["mock", "google", "sheets"]
+    source: Literal["mock", "google", "sheets", "database"]
     connected: bool
     writable: bool
 

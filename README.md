@@ -6,6 +6,18 @@ La versión actual permite gestionar la agenda de bolos, con altas, edición y e
 
 React y TypeScript ofrecen la interfaz y FastAPI gestiona las operaciones y la integración con Google Workspace. Sheets conserva los datos completos y Docs presenta las columnas compartidas. El modo demo funciona con datos de ejemplo en memoria.
 
+También está disponible `DATA_SOURCE=database`: una agenda persistente SQLite con
+UUID, versiones, historial y modelos de sincronización y conflictos. En este
+proyecto requiere `GOOGLE_SYNC=true` para mantener la agenda sincronizada con
+Sheets y Docs. Los modos
+existentes no se migran automáticamente. Consulta [creación, activación, migración
+y copias de seguridad](docs/database.md).
+
+En modo database se crea una copia privada y verificada de SQLite cada hora,
+conservando las 48 últimas, mientras el backend está encendido. Se configuran en
+el bloque de copias de `backend/.env.example`. La guía incluye los comandos para
+verificar y restaurar una copia en otro archivo sin acceder a Google.
+
 ## Arranque local
 
 Requisitos: Python 3.12 o superior, Node.js 22 o superior y npm. Desde la raíz:

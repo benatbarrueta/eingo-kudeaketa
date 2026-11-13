@@ -10,6 +10,7 @@ import { CircleCheck } from "lucide-react";
 import { VisitChanges } from "./components/VisitChanges";
 import { AppHeader } from "./components/AppHeader";
 import { EventForm } from "./components/EventForm";
+import { SyncConflict } from "./components/SyncConflict";
 import { useCalendar } from "./hooks/useCalendar";
 import { DashboardPage } from "./pages/DashboardPage";
 import { CalendarPage } from "./pages/CalendarPage";
@@ -41,11 +42,13 @@ function AppRoutes() {
   const [actionError, setActionError] = useState("");
   const [highlight, setHighlight] = useState<number>();
   const [resetting, setResetting] = useState(false);
+  const showSyncResolution = config?.source === "database" && !!config.googleSync &&
+    !loading && !!(error || syncStatus?.error);
 
   const events: EventRow[] =
     table?.rows.flatMap((row, id) => {
       if (row.kind !== "event" || !row.date) return [];
-      return [{ id, date: row.date, values: row.values }];
+      return [{ id, date: row.date, values: row.values, eventId: row.eventId, version: row.version }];
     }) ?? [];
   events.sort((a, b) => a.date.localeCompare(b.date));
 
@@ -114,17 +117,18 @@ function AppRoutes() {
         <AppHeader
           config={config}
           connected={!!table}
-          canAdd={!!table && !loading && !resetting}
+          canAdd={!!table && !loading && !resetting && !syncStatus?.error}
           onAdd={() => openForm()}
         />
         <main>
           {storageError && <p className="error" role="status">{t.visitStorageError}</p>}
           <VisitChanges changes={changes} />
-          {syncStatus?.enabled && (
+          {syncStatus?.enabled && !showSyncResolution && (
             <p className={syncStatus.error ? "error" : "muted"} role="status">
               {syncStatus.error ? t.syncConflict : t.autoSync}
             </p>
           )}
+          {showSyncResolution && <SyncConflict onResolved={refresh} />}
           {notice && (
             <div className="notice" role="status">
               <CircleCheck size={18} />
@@ -137,7 +141,7 @@ function AppRoutes() {
             </p>
           )}
           {loading && <p role="status">{t.loading}</p>}
-          {!loading && error && (
+          {!loading && error && !showSyncResolution && (
             <div className="card panel">
               <p className="error" role="alert">
                 {message(error)}

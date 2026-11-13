@@ -121,5 +121,23 @@
     "Vi",
     "Sá",
     "Do"
-  ]
+  ],
+  "databaseDescription": "Datos de la agenda, con las nueve columnas.",
+  "databaseConnected": "Agenda conectada",
+  "databaseSyncPending": "Los datos están guardados en la agenda. Falta sincronizar Google: pulsa Sincronizar. No repitas el cambio.",
+  "databaseBusy": "La agenda está ocupada. Espera unos segundos y vuelve a intentarlo.",
+  "conflictAgenda": "Agenda web",
+  "conflictEmpty": "(Vacío)",
+  "conflictTitle": "¿Qué valor quieres guardar?",
+  "conflictHelp": "Hay valores distintos para el mismo campo. Elige cuál conservar.",
+  "conflictPending": "Hay una operación pendiente. Pulsa Sincronizar para intentar reanudarla. Si sigue fallando, requiere revisión antes de elegir valores.",
+  "conflictStructural": "Las diferencias afectan a filas, fechas o localidades que no podemos identificar con seguridad. Requieren revisión antes de escribir.",
+  "conflictNone": "Ya no hay campos en conflicto. Pulsa Reintentar para sincronizar y cargar la agenda.",
+  "conflictReview": "Volver a comprobar",
+  "conflictApply": "Guardar y sincronizar",
+  "conflictChanged": "Los datos han cambiado desde que abriste las opciones. Actualiza las opciones y vuelve a elegir.",
+  "conflictPaused": "SINCRONIZACIÓN EN PAUSA",
+  "conflictChoose": "Conservar este valor",
+  "conflictSelected": "Valor seleccionado",
+  "conflictApplyHelp": "Se aplicará en la agenda y en Google."
 }

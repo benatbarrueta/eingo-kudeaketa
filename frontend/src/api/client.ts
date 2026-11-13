@@ -3,11 +3,15 @@ import { t } from "../lib/labels";
 const apiOrigin = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 const errorMessages: Record<string, keyof typeof t> = {
   sync_conflict: "syncConflict",
+  conflict_changed: "conflictChanged",
+  conflict_not_resolvable: "conflictStructural",
   sync_ambiguous_events: "syncConflict",
   sync_initial_mismatch: "sourcesDiffer",
   sync_state_mismatch: "syncConflict",
   sources_differ: "sourcesDiffer",
   sync_pending: "syncPending",
+  database_sync_pending: "databaseSyncPending",
+  database_busy: "databaseBusy",
   sheets_access_denied: "sheetsError",
   sheets_unavailable: "sheetsError",
   sheets_api_error: "sheetsError",

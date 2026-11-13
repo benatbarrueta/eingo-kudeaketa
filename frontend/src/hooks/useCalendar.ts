@@ -22,7 +22,9 @@ export function useCalendar() {
     setError("");
     try {
       const cfg = await getCalendarConfig();
-      if (cfg.source === "sheets") await synchronizeDocument();
+      setConfig(cfg);
+      if (cfg.source === "sheets" || cfg.googleSync) await synchronizeDocument();
+      if (cfg.source === "sheets" || cfg.googleSync) setSyncStatus(await getSyncStatus());
       const current = await getDocumentStructure();
       const key = visitKey(cfg);
       if (!initialized.current) {
@@ -56,7 +58,7 @@ export function useCalendar() {
     return () => document.removeEventListener("visibilitychange", resume);
   }, [refresh]);
   useEffect(() => {
-    if (config?.source !== "sheets") return;
+    if (config?.source !== "sheets" && !config?.googleSync) return;
     let active = true;
     let timer: ReturnType<typeof setTimeout>;
     async function poll() {
@@ -80,7 +82,7 @@ export function useCalendar() {
     }
     void poll();
     return () => { active = false; clearTimeout(timer); };
-  }, [config?.source]);
+  }, [config?.source, config?.googleSync]);
   useEffect(() => {
     if (table && storageKey.current && !syncStatus?.error && document.visibilityState === "visible") setStorageError(!saveVisit(storageKey.current, table));
   }, [table, syncStatus?.error]);

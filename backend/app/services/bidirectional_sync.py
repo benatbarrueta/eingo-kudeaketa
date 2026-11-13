@@ -11,9 +11,9 @@ from app.utils.basque_dates import format_date, parse
 from app.services.chronological_service import insertion
 
 
-def align(base, current):
-    matcher = SequenceMatcher(a=[tuple(row[:7]) for row in base],
-                              b=[tuple(row[:7]) for row in current], autojunk=False)
+def align(base, current, width=7):
+    matcher = SequenceMatcher(a=[tuple(row[:width]) for row in base],
+                              b=[tuple(row[:width]) for row in current], autojunk=False)
     mapped = {}
     inserted = {}
     for kind, start, end, new_start, new_end in matcher.get_opcodes():
@@ -35,40 +35,40 @@ def align(base, current):
     return mapped, inserted
 
 
-def merge(base, sheets, docs):
-    if docs == [row[:7] for row in sheets]:
+def merge(base, sheets, docs, width=7):
+    if docs == [row[:width] for row in sheets]:
         return sheets
-    duplicates = Counter(tuple(row[:7]) for row in base)
+    duplicates = Counter(tuple(row[:width]) for row in base)
     if any(count > 1 for count in duplicates.values()):
         raise CalendarError("sync_ambiguous_events")
-    source, source_added = align(base, sheets)
-    document, document_added = align(base, docs)
+    source, source_added = align(base, sheets, width)
+    document, document_added = align(base, docs, width)
     result = []
     for index in range(len(base) + 1):
         left = source_added.get(index, [])
         right = document_added.get(index, [])
-        if left and right and [row[:7] for row in left] != right:
+        if left and right and [row[:width] for row in left] != right:
             raise CalendarError("sync_conflict")
-        result.extend(left or [row + ["", ""] for row in right])
+        result.extend(left or [row + [""] * (9 - width) for row in right])
         if index == len(base):
             break
         original = base[index]
         left, right = source[index], document[index]
         if left is None or right is None:
             survivor = right if left is None else left
-            expected = original[:7] if left is None else original
+            expected = original[:width] if left is None else original
             if survivor is not None and survivor != expected:
                 raise CalendarError("sync_conflict")
             continue
         row = []
-        for old, sheet_value, doc_value in zip(original[:7], left[:7], right):
+        for old, sheet_value, doc_value in zip(original[:width], left[:width], right):
             if sheet_value == doc_value or doc_value == old:
                 row.append(sheet_value)
             elif sheet_value == old:
                 row.append(doc_value)
             else:
                 raise CalendarError("sync_conflict")
-        result.append(row + left[7:9])
+        result.append(row + left[width:9])
     return result
 
 
