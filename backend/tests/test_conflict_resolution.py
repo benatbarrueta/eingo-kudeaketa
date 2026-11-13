@@ -161,3 +161,12 @@ def test_api_preview_and_resolution_validate_payload_and_mode(tmp_path):
     assert result.status_code == 200 and result.json()["rows"][1]["values"][3] == "19:00"
     mock = TestClient(create_app(Settings("mock", 2027)))
     assert mock.get("/api/sync/conflict").status_code == 404
+
+
+def test_existing_sheets_sync_response_keeps_document_seven_columns(tmp_path):
+    engine, sheets, docs = make_engine(tmp_path)
+    settings = Settings("sheets", 2027, auto_sync=True, sync_state_path=str(tmp_path / "state.json"))
+    client = TestClient(create_app(settings, engine.repository))
+    response = client.post("/api/document/sync")
+    assert response.status_code == 200
+    assert len(response.json()["columns"]) == 7

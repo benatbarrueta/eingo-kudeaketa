@@ -51,6 +51,8 @@ def router(settings, service, guard):
                 raise CalendarError("sheets_only", 404)
             if service.synchronizer:
                 service.synchronize()
+                if settings.source == "sheets":
+                    return service.repo.document.read().public()
                 return service.repo.read().public()
             return service.repo.synchronize().public()
 
