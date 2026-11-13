@@ -50,8 +50,8 @@
   padding: 6px 10px;
   font-size: 0.75rem;
   font-weight: 670;
-  background: #eef3fb;
-  color: #304466;
+  background: var(--surface-soft, #eef3fb);
+  color: var(--secondary-text, #304466);
   white-space: nowrap;
 }
 
@@ -78,9 +78,9 @@
 }
 
 .secondary {
-  background: white;
-  border: 1px solid #ccd8ec;
-  color: #254479;
+  background: var(--surface, white);
+  border: 1px solid var(--border, #ccd8ec);
+  color: var(--accent-text, #254479);
   padding: 9px 13px;
 }
 
@@ -88,14 +88,14 @@
 .iconButton {
   background: none;
   border: 0;
-  color: #204fbd;
+  color: var(--accent-text, #204fbd);
   padding: 7px;
 }
 
 .secondary:hover,
 .linkButton:hover,
 .iconButton:hover {
-  background: #eef3ff;
+  background: var(--accent-soft, #eef3ff);
 }
 
 main {
@@ -106,7 +106,7 @@ main {
 }
 
 .card {
-  background: white;
+  background: var(--surface, white);
   border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: var(--shadow);
@@ -131,7 +131,7 @@ main {
 }
 
 .highlight {
-  background: #e6efff !important;
+  background: var(--accent-hover, #e6efff) !important;
 }
 
 .notice,
@@ -146,13 +146,13 @@ main {
   display: flex;
   gap: 8px;
   align-items: center;
-  background: #e7f8ed;
-  color: #145738;
+  background: var(--success-bg, #e7f8ed);
+  color: var(--success-text, #145738);
 }
 
 .error {
-  background: #fceeed;
-  color: #8a2724;
+  background: var(--error-bg, #fceeed);
+  color: var(--error-text, #8a2724);
 }
 
 @media (max-width: 620px) {

@@ -1,6 +1,7 @@
 import { CalendarDays, CalendarRange, FileSpreadsheet, FileText, LayoutDashboard, List, Plus } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
 import type { Config } from "../types/calendar";
+import { useTheme } from "../hooks/useTheme";
 import { LanguagePicker } from "./LanguagePicker";
 import { useLabels } from "../lib/labels";
 import "../styles/AppHeader.css";
@@ -14,6 +15,7 @@ interface AppHeaderProps {
 }
 
 export function AppHeader({ config, connected, canAdd, onAdd }: AppHeaderProps) {
+  useTheme();
   const { t } = useLabels();
   const navigationItems = [
     { path: "/", label: t.home, Icon: LayoutDashboard },
