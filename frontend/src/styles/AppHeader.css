@@ -1,5 +1,5 @@
 .app-header {
-  background: white;
+  background: var(--surface, white);
   border-bottom: 1px solid var(--line);
   padding: 18px clamp(16px, 4vw, 44px) 0;
 }
@@ -61,7 +61,7 @@
 
 .navLink:hover {
   color: var(--blue);
-  background: #f4f7ff;
+  background: var(--accent-soft, #f4f7ff);
 }
 
 .navLink.selected {
@@ -124,14 +124,14 @@
   padding: 6px 9px;
   border: 1px solid transparent;
   border-radius: 7px;
-  background: white;
+  background: var(--surface, white);
   cursor: pointer;
   list-style: none;
 }
 
 .languagePicker summary::-webkit-details-marker { display: none; }
 .languagePicker summary:hover,
-.languagePicker[open] summary { background: #f4f7ff; color: var(--blue); }
+.languagePicker[open] summary { background: var(--accent-soft, #f4f7ff); color: var(--blue); }
 .languagePicker summary:focus-visible,
 .languageOptions button:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 .languagePicker[open] summary > svg:last-child { transform: rotate(180deg); }
@@ -153,7 +153,7 @@
   padding: 4px;
   border: 1px solid var(--line);
   border-radius: 10px;
-  background: white;
+  background: var(--surface, white);
   box-shadow: 0 8px 24px rgb(20 40 80 / 12%);
 }
 
@@ -173,5 +173,5 @@
 }
 
 .languageOptions button:hover,
-.languageOptions button[aria-pressed="true"] { background: #eef3ff; color: var(--blue); }
+.languageOptions button[aria-pressed="true"] { background: var(--accent-soft, #eef3ff); color: var(--blue); }
 .languageOptions button > svg:last-child:not(.languageFlag) { margin-left: auto; }
