@@ -1,6 +1,6 @@
 import { ArrowRight, CalendarDays, Layers3, MapPin } from "lucide-react";
 import type { Config, EventRow, Table } from "../types/calendar";
-import { t } from "../lib/labels";
+import { useLabels } from "../lib/labels";
 import { eventMonth } from "../lib/calendar";
 import { EventList } from "../components/EventList";
 import "../styles/DashboardPage.css";
@@ -16,6 +16,7 @@ export function DashboardPage({
   config: Config;
   go: () => void;
 }) {
+  const { t } = useLabels();
   const town = table.columns.indexOf("HERRIA");
   const now = new Date();
   const today = [

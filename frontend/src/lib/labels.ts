@@ -1,105 +1,42 @@
-export const months = [
-  "Urtarrila",
-  "Otsaila",
-  "Martxoa",
-  "Apirila",
-  "Maiatza",
-  "Ekaina",
-  "Uztaila",
-  "Abuztua",
-  "Iraila",
-  "Urria",
-  "Azaroa",
-  "Abendua",
-];
-export const weekdays = ["Al", "Ar", "Az", "Og", "Or", "Lr", "Ig"];
+import i18n from "i18next";
+import { initReactI18next, useTranslation } from "react-i18next";
+import eu from "./locales/eu.json";
+import es from "./locales/es.json";
 
-export const t = {
-  changedTo: "Balio berria",
-  visitChangesSubtitle: "Kanpoan zinen bitartean egutegian egindako aldaketak.",
-  visitChanges: "Azken bisitatik egindako aldaketak",
-  visitChangesHelp: "Nabigatzaile honetan ikusitako azken datuekiko aldeak. Data edo herria aldatuz gero, baja eta alta gisa ager daiteke.",
-  visitStorageError: "Ezin da azken bisita nabigatzaile honetan gorde. Aldaketen abisua ez da erabilgarri egongo hurrengo bisitan.",
-  added: "Gehituta",
-  removed: "Ezabatuta",
-  updated: "Aldatuta",
-  synchronizeFiles: "Sinkronizatu",
-  calendar: "Egutegia",
-  calendarDescription: "Ikusi ekitaldiak hilabeteka. Sakatu ekitaldi bat editatzeko.",
-  spreadsheet: "Excel",
-  spreadsheetDescription: "Google Sheets-eko datuak, zutabe guztiekin.",
-  spreadsheetDemo: "Konfiguratutako datu-iturriaren irakurtzeko ikuspegia.",
-  openSpreadsheet: "Ireki Google Sheets-en",
-  previousMonth: "Aurreko hilabetea",
-  nextMonth: "Hurrengo hilabetea",
-  chooseMonth: "Aukeratu hilabetea",
-  autoSync: "Sheets ↔ Docs · Sinkronizazio automatikoa 15 segundoro",
-  syncConflict: "Sinkronizazioa geldituta dago. Berrikusi bi fitxategietako aldaketak edo konexioa, eta sakatu sinkronizatu.",
-  sheetsSource: "Google Sheets",
-  importDocument: "Inportatu Docs-eko ekitaldiak",
-  importConfirm: "Docs-eko ekitaldiak Google Sheets-era kopiatu nahi dituzu?",
-  synchronize: "Sinkronizatu dokumentua",
-  syncDone: "Sinkronizazioa amaitu da.",
-  importDone: "Ekitaldiak Google Sheets-era inportatu dira.",
-  sheetsConnected: "Google Sheets konektatuta",
-  sourcesDiffer: "Sheets eta Docs ez datoz bat. Lehen aldian, inportatu Docs-eko ekitaldiak. Bestela, sinkronizatu dokumentua.",
-  syncPending: "Datuak Sheets-en gordeta daude. Docs eguneratu behar da: sakatu Sinkronizatu dokumentua.",
-  sheetsError: "Ezin izan da Google Sheets irakurri. Egiaztatu APIa eta zerbitzu-kontuaren baimenak.",
-  chooseDescription: "Aukeratu mota",
-  otherDescription: "Beste bat",
-  customDescription: "Idatzi azalpena",
-  descriptionRequired: "Idatzi azalpena «Beste bat» aukeratzen baduzu.",
-  currentFieldValue: "Oraingo balioa:",
-  editEvent: "Editatu",
-  deleteEvent: "Ezabatu",
-  deleteConfirm: "Ekitaldi hau ezabatu nahi duzu?",
-  edited: "Aldaketak gorde dira.",
-  deleted: "Ekitaldia ezabatu da.",
-  dateChangesPosition: "Data berriak ekitaldia lekuz aldatuko luke. Aukeratu hilabete bereko data bat, inguruko ekitaldien ordena mantenduz.",
-  agenda: "Agenda",
-  workspace: "LAN-EREMUA",
-  home: "Hasiera",
-  events: "Ekitaldiak",
-  document: "Dokumentua",
-  add: "Ekitaldia gehitu",
-  overview: "EGUTEGIAREN LABURPENA",
-  intro: "Kontsultatu eta antolatu EINGOren ekitaldiak leku bakarrean.",
-  total: "Ekitaldi guztira",
-  locations: "Herriak",
-  active: "Hilabete aktiboak",
-  upcoming: "Hurrengo ekitaldiak",
-  all: "Ikusi ekitaldiak",
-  emptyUpcoming: "Ez dago hurrengo ekitaldirik.",
-  loading: "Kargatzen...",
-  saving: "Gordetzen…",
-  saved: "Ekitaldia ondo gorde da.",
-  existing: "Ekitaldi hori egutegian zegoen lehendik.",
-  failed: "Errorea dokumentua eguneratzean.",
-  demo: "Demo modua",
-  connected: "Google Docs konektatuta",
-  disconnected: "Konexiorik ez",
-  date: "Data",
-  town: "Herria",
-  save: "Gorde",
-  cancel: "Utzi",
-  search: "Bilatu herriaren arabera",
-  allMonths: "Hilabete guztiak",
-  noResults: "Ez da ekitaldirik aurkitu.",
-  open: "Ireki Google Docs-en",
-  preview: "Dokumentuko egutegiaren irakurtzeko ikuspegia.",
-  reset: "Berrezarri demoa",
-  resetDone: "Demoko datuak berrezarri dira.",
-  formHelp:
-    "Ekitaldia dagokion hilabetean eta hurrenkera kronologikoan gordeko da.",
-  monthMissing: "Hilabete horrek ez du blokerik egutegian.",
-  conflict: "Dokumentua aldatu da. Freskatu eta saiatu berriro.",
-  manual: "Egiaztatu dokumentua eskuz beste ekitaldi bat gorde aurretik.",
-  retry: "Saiatu berriro",
-  count: "ekitaldi",
-  source: "DATU-ITURRIA",
-  local: "Tokiko demoaren datuak",
-  external: "Google Docs-eko kopia",
-  unsafe: "Dokumentuaren egitura berrikusi behar da idatzi aurretik.",
-  rate: "Eskaera gehiegi. Itxaron minutu bat.",
-  invalid: "Egiaztatu formularioaren datuak.",
-};
+export const languageStorageKey = "eingo.language";
+function initialLanguage() {
+  try { return localStorage.getItem(languageStorageKey) === "es" ? "es" : "eu"; }
+  catch { return "eu"; }
+}
+function applyLanguage(language: string) {
+  document.documentElement.lang = language;
+  document.title = language === "es" ? es.appName : eu.appName;
+  try { localStorage.setItem(languageStorageKey, language); } catch { /* Language still works without storage. */ }
+}
+i18n.on("languageChanged", applyLanguage);
+void i18n.use(initReactI18next).init({
+  resources: { eu: { translation: eu }, es: { translation: es } },
+  lng: initialLanguage(), fallbackLng: "eu", supportedLngs: ["eu", "es"],
+  interpolation: { escapeValue: false }, initAsync: false,
+});
+
+type Labels = Omit<typeof eu, "months" | "weekdays">;
+// API helpers resolve messages in the language selected when the request finishes.
+export const t = new Proxy({} as Labels, {
+  get: (_target, key: string) => i18n.t(key),
+});
+export function useLabels() {
+  const { i18n } = useTranslation();
+  const labels = i18n.resolvedLanguage === "es" ? es : eu;
+  return { t: labels, months: labels.months, weekdays: labels.weekdays,
+    language: i18n.resolvedLanguage === "es" ? "es" : "eu",
+    changeLanguage: (language: string) => { if (language === "eu" || language === "es") void i18n.changeLanguage(language); },
+    columnLabel: (column: string) => i18n.t("column_" + column, { defaultValue: column }),
+    descriptionLabel: (value: string) => i18n.t("description_" + value, { defaultValue: value }),
+    message: (value: string) => {
+      const key = (Object.keys(eu) as (keyof typeof eu)[]).find(key => eu[key] === value || es[key] === value);
+      return key ? i18n.t(key) : value;
+    },
+  };
+}
+export default i18n;

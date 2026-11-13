@@ -1,9 +1,10 @@
 import { ArrowRight, ChevronDown, History, Pencil, Plus, Minus } from "lucide-react";
 import type { VisitChange } from "../lib/visitChanges";
-import { t } from "../lib/labels";
+import { useLabels } from "../lib/labels";
 import "../styles/VisitChanges.css";
 
 export function VisitChanges({ changes }: { changes: VisitChange[] }) {
+  const { t, columnLabel } = useLabels();
   if (!changes.length) return null;
   return (
     <details className="visitChanges" open>
@@ -26,7 +27,7 @@ export function VisitChanges({ changes }: { changes: VisitChange[] }) {
               </div>
               {change.fields.length > 0 && <ul className="visitChangeFields">
                 {change.fields.map(field => <li key={field.name}>
-                  <span className="visitChangeFieldName">{field.name}</span>
+                  <span className="visitChangeFieldName">{columnLabel(field.name)}</span>
                   <span className="visitChangeBefore">{field.before || "—"}</span>
                   <ArrowRight size={14} aria-label={t.changedTo} />
                   <span className="visitChangeAfter">{field.after || "—"}</span>

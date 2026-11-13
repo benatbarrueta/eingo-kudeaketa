@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import type { Config, EventRow, Table } from "../types/calendar";
-import { months, t, weekdays } from "../lib/labels";
+import { useLabels } from "../lib/labels";
 import { eventMonth } from "../lib/calendar";
 import "../styles/CalendarPage.css";
 
@@ -16,6 +16,7 @@ export function CalendarPage({ events, table, config, onEdit, onAdd }: {
   onEdit: (event: EventRow) => void;
   onAdd: (date: string) => void;
 }) {
+  const { t, months, weekdays } = useLabels();
   const now = new Date();
   const [month, setMonth] = useState(() => config.year === now.getFullYear()
     ? now.getMonth() : events.length ? eventMonth(events[0].date) : 0);
