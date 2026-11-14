@@ -18,10 +18,10 @@ export function SpreadsheetPage({ table, config, highlight, busy, onImport, onSy
     <>
       <FilePageHeader
         title={t.spreadsheet}
-        description={t.spreadsheetDescription}
+        description={config.source === "database" ? t.databaseDescription : t.spreadsheetDescription}
         url={config.spreadsheetUrl}
         openLabel={t.openSpreadsheet}
-        canSynchronize={config.source === "sheets"}
+        canSynchronize={config.source === "sheets" || !!config.googleSync}
         busy={busy}
         onSynchronize={onSynchronize}
       />

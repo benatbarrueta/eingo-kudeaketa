@@ -65,7 +65,7 @@ export function EventForm({
     setError("");
     try {
       if (deleting && target) {
-        deleted(await deleteEvent(target.id, target.values));
+        deleted(await deleteEvent(target.eventId ?? target.id, target.values, target.version));
         return;
       }
       const customDescription = String(data.get("customDescription") ?? "").trim();
@@ -89,7 +89,7 @@ export function EventForm({
       );
       const input = { date: String(data.get("date")), town: String(data.get("town")), fields };
       saved(target
-        ? await updateEvent(target.id, target.values, input)
+        ? await updateEvent(target.eventId ?? target.id, target.values, input, target.version)
         : await createEvent(input));
     } catch (err) {
       setError(err instanceof Error ? err.message : t.failed);

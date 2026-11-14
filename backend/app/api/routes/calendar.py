@@ -1,11 +1,39 @@
 from fastapi import APIRouter, Request, Response
 from app.models.calendar import CalendarError
 from app.schemas.events import EventCreate, EventTarget, EventUpdate
+from app.schemas.sync import ConflictResolution
 from app.schemas.responses import Config, DocumentStatus, Events, EventSaved, Ok, Table
+from app.services.conflict_resolution import preview, resolve
 
 
 def router(settings, service, guard):
     api = APIRouter(prefix="/api")
+
+    @api.get("/backup/status")
+    def backup_status():
+        backups = getattr(service, "backups", None)
+        if backups:
+            return backups.status()
+        return {"enabled": False, "lastSuccess": None, "error": None,
+                "intervalSeconds": settings.backup_interval, "retainedCopies": 0, "keep": settings.backup_keep}
+
+    def database_engine():
+        engine = service.synchronizer
+        if settings.source != "database" or not settings.google_sync or engine is None:
+            raise CalendarError("conflict_not_resolvable", 404)
+        return engine
+
+    @api.get("/sync/conflict")
+    def conflict_preview():
+        with service.lock:
+            return preview(database_engine()).public
+
+    @api.post("/sync/conflict/resolve", response_model=Table)
+    def resolve_conflict(request: Request, selection: ConflictResolution):
+        guard.check(request)
+        with service.lock:
+            resolve(database_engine(), selection)
+            return service.repo.read().public()
 
     @api.post("/sheets/import-document", response_model=Table)
     def import_document(request: Request):
@@ -19,11 +47,13 @@ def router(settings, service, guard):
     def synchronize(request: Request):
         guard.check(request)
         with service.lock:
-            if settings.source != "sheets":
+            if settings.source != "sheets" and not (settings.source == "database" and settings.google_sync):
                 raise CalendarError("sheets_only", 404)
             if service.synchronizer:
                 service.synchronize()
-                return service.repo.document.read().public()
+                if settings.source == "sheets":
+                    return service.repo.document.read().public()
+                return service.repo.read().public()
             return service.repo.synchronize().public()
 
     @api.get("/sync/status")
@@ -43,9 +73,11 @@ def router(settings, service, guard):
         url = f"https://docs.google.com/document/d/{settings.document}/edit"
         if settings.tab:
             url += f"?tab={settings.tab}"
+        uses_google = settings.source in ("google", "sheets") or (settings.source == "database" and settings.google_sync)
         return {"year": settings.year, "source": settings.source,
-                "documentUrl": url if settings.source != "mock" else None,
-                "spreadsheetUrl": f"https://docs.google.com/spreadsheets/d/{settings.spreadsheet}/edit" if settings.source == "sheets" else None}
+                "googleSync": settings.source == "database" and settings.google_sync,
+                "documentUrl": url if uses_google else None,
+                "spreadsheetUrl": f"https://docs.google.com/spreadsheets/d/{settings.spreadsheet}/edit" if uses_google and settings.spreadsheet else None}
 
     @api.get("/events", response_model=Events)
     def events():
@@ -62,19 +94,26 @@ def router(settings, service, guard):
         return result
 
     @api.post("/events/{index}/edit", response_model=EventSaved)
-    def edit(index: int, event: EventUpdate, request: Request):
+    def edit(index: str, event: EventUpdate, request: Request):
         guard.check(request)
         return service.update(index, event)
 
     @api.post("/events/{index}/delete", response_model=Table)
-    def delete(index: int, target: EventTarget, request: Request):
+    def delete(index: str, target: EventTarget, request: Request):
         guard.check(request)
         return service.delete(index, target)
 
     @api.get("/document/structure", response_model=Table)
     def structure():
         document = getattr(service.repo, "document", service.repo)
-        return document.read().public()
+        calendar = document.read().public()
+        if settings.source == "database" and not settings.google_sync:
+            calendar["columns"] = calendar["columns"][:7]
+            for row in calendar["rows"]:
+                row["values"] = row["values"][:7]
+                if row["spans"]:
+                    row["spans"] = row["spans"][:7]
+        return calendar
 
     @api.get("/calendar", response_model=Table)
     def calendar():

@@ -16,32 +16,54 @@ from app.repositories.google_docs_repository import GoogleRepository
 from app.repositories.google_sheets_repository import SheetsRepository
 from app.repositories.synced_repository import SyncedRepository
 from app.repositories.mock_repository import MockRepository
+from app.repositories.database_repository import DatabaseRepository
 from app.services.bidirectional_sync import BidirectionalSync
+from app.services.database_sync import DatabaseSync
 from app.services.event_service import EventService
+from app.services.database_backup import DatabaseBackups
 
 
 def create_app(settings=None, repo=None):
     settings = settings or Settings.load()
+    identity = [settings.spreadsheet, settings.sheet_id, settings.document, settings.tab,
+                settings.table, settings.year]
+    google_sync = settings.source == "database" and settings.google_sync
+    remote = None
     if repo is None:
         if settings.source == "mock":
             repo = MockRepository(settings.year)
+        elif settings.source == "database":
+            repo = DatabaseRepository(settings.database_path, settings.year, identity if google_sync else [])
+            if google_sync:
+                remote = SyncedRepository(SheetsRepository(settings), GoogleRepository(settings))
         elif settings.source == "sheets":
             repo = SyncedRepository(SheetsRepository(settings), GoogleRepository(settings))
         else:
             repo = GoogleRepository(settings)
     service = EventService(repo, settings.year)
     engine = None
-    if settings.source == "sheets" and settings.auto_sync:
-        identity = [settings.spreadsheet, settings.sheet_id, settings.document, settings.tab,
-                    settings.table, settings.year]
+    if google_sync:
+        remote = remote or getattr(repo, "remote", None)
+        if remote is None:
+            raise ValueError("A Google repository is required for database synchronization")
+        engine = DatabaseSync(remote, repo, settings.sync_state_path, settings.year, identity)
+        repo.document = remote.document
+        service.synchronizer = engine
+    elif settings.source == "sheets" and settings.auto_sync:
         engine = BidirectionalSync(repo, settings.sync_state_path, settings.year, identity)
         service.synchronizer = engine
+    backups = None
+    if settings.source == "database" and settings.auto_backup:
+        backups = DatabaseBackups(repo.database, settings.backup_directory,
+                                  settings.backup_interval, settings.backup_keep)
+    service.backups = backups
 
     @asynccontextmanager
     async def lifespan(app):
         stop = Event()
         thread = None
         lock_file = None
+        backup_thread = None
         if engine:
             path = Path(settings.sync_state_path)
             path.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
@@ -58,9 +80,15 @@ def create_app(settings=None, repo=None):
                         engine.tick()
                     stop.wait(settings.sync_interval)
 
-            thread = Thread(target=synchronize, name="eingo-sync", daemon=True)
-            thread.start()
+            if settings.auto_sync:
+                thread = Thread(target=synchronize, name="eingo-sync", daemon=True)
+                thread.start()
         try:
+            if backups:
+                import asyncio
+                await asyncio.to_thread(backups.tick, stop)
+                backup_thread = Thread(target=backups.run, args=(stop,), name="eingo-backup", daemon=True)
+                backup_thread.start()
             yield
         finally:
             stop.set()
@@ -68,6 +96,9 @@ def create_app(settings=None, repo=None):
                 # Keep the cross-process lock until the active request has finished.
                 import asyncio
                 await asyncio.to_thread(thread.join)
+            if backup_thread:
+                import asyncio
+                await asyncio.to_thread(backup_thread.join)
             if lock_file:
                 lock_file.close()
 

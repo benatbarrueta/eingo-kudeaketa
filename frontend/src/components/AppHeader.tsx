@@ -26,6 +26,7 @@ export function AppHeader({ config, connected, canAdd, onAdd }: AppHeaderProps) 
   ];
   const status = config?.source === "mock" ? t.demo
     : !connected ? t.disconnected
+    : config?.source === "database" ? t.databaseConnected
     : config?.source === "sheets" ? t.sheetsConnected : t.connected;
 
   return (

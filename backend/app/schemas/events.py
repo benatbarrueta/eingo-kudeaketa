@@ -31,7 +31,9 @@ class EventCreate(BaseModel):
 class EventTarget(BaseModel):
     model_config = ConfigDict(extra="forbid")
     expected: list[str] = Field(max_length=200)
+    expectedVersion: int | None = Field(default=None, ge=1)
 
 
 class EventUpdate(EventCreate):
     expected: list[str] = Field(max_length=200)
+    expectedVersion: int | None = Field(default=None, ge=1)

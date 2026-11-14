@@ -16,6 +16,7 @@ const { createElement } = await import("react");
 const { renderToStaticMarkup } = await import("react-dom/server");
 const { EventsPage } = await server.ssrLoadModule("/src/pages/EventsPage.tsx");
 const { VisitChanges } = await server.ssrLoadModule("/src/components/VisitChanges.tsx");
+const { ConflictChoices } = await server.ssrLoadModule("/src/components/SyncConflict.tsx");
 const render = element => renderToStaticMarkup(element);
 
 test("both catalogs cover the same labels and calendar", () => {
@@ -61,4 +62,27 @@ test("blocked local storage does not prevent switching languages", async () => {
     globalThis.localStorage = previous;
     await i18n.changeLanguage("eu");
   }
+});
+
+test("conflict choices show the field and both values with no automatic selection", async () => {
+  const preview = { token: "example", canResolve: true, reason: null, fields: [
+    { key: "event:ORDUA", date: "2027-01-07", town: "Test town", column: "ORDUA", options: [
+      { source: "sheets", value: "18:00" }, { source: "docs", value: "19:00" },
+    ] },
+  ] };
+  await i18n.changeLanguage("es");
+  try {
+    const html = render(createElement(ConflictChoices, { preview, choices: {}, busy: false, onChoose() {} }));
+    assert.match(html, /Test town/);
+    assert.match(html, /HORA/);
+    assert.match(html, /Google Sheets/);
+    assert.match(html, /Google Docs/);
+    assert.match(html, /18:00/);
+    assert.match(html, /19:00/);
+    assert.equal((html.match(/type="radio"/g) ?? []).length, 2);
+    assert.doesNotMatch(html, /checked/);
+    const selected = render(createElement(ConflictChoices, { preview, choices: { "event:ORDUA": "docs" }, busy: true, onChoose() {} }));
+    assert.match(selected, /disabled/);
+    assert.equal((selected.match(/checked/g) ?? []).length, 1);
+  } finally { await i18n.changeLanguage("eu"); }
 });

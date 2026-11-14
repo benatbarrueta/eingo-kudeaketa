@@ -16,6 +16,8 @@ class Row:
     date: Date | None = None
     spans: list[int] | None = None
     style: dict | None = None
+    event_id: str | None = None
+    version: int | None = None
 
 
 @dataclass
@@ -31,9 +33,11 @@ class Calendar:
         return {
             "title": self.title, "columns": self.columns,
             "rows": [{"kind": r.kind, "values": r.values, "spans": r.spans,
-                      "date": r.date} for r in self.rows],
+                      "date": r.date, **({"eventId": r.event_id, "version": r.version}
+                                          if r.event_id else {})} for r in self.rows],
         }
 
     def events(self):
-        return [{"id": i, "date": r.date, "values": r.values}
+        return [{"id": i, "date": r.date, "values": r.values,
+                 **({"eventId": r.event_id, "version": r.version} if r.event_id else {})}
                 for i, r in enumerate(self.rows) if r.kind == "event"]

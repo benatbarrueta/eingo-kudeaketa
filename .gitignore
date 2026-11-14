@@ -10,3 +10,8 @@ credentials*.json
 service-account*.json
 .DS_Store
 .local-sync/
+.local-data/
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*

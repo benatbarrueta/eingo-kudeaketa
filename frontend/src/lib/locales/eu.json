@@ -121,5 +121,23 @@
     "Or",
     "Lr",
     "Ig"
-  ]
+  ],
+  "databaseDescription": "Agendako datuak, bederatzi zutabeekin.",
+  "databaseConnected": "Agenda konektatuta",
+  "databaseSyncPending": "Datuak agendan gordeta daude. Google sinkronizatzea falta da: sakatu Sinkronizatu. Ez errepikatu aldaketa.",
+  "databaseBusy": "Agenda lanpetuta dago. Itxaron segundo batzuk eta saiatu berriro.",
+  "conflictAgenda": "Webeko agenda",
+  "conflictEmpty": "(Hutsik)",
+  "conflictTitle": "Zein balio gorde nahi duzu?",
+  "conflictHelp": "Eremu berak balio desberdinak ditu. Aukeratu zein gorde.",
+  "conflictPending": "Eragiketa bat amaitu gabe dago. Sakatu Sinkronizatu berriro hasteko. Huts egiten jarraitzen badu, balioak aukeratu aurretik berrikusi behar da.",
+  "conflictStructural": "Ezin dira errenkada, data edo herri batzuk segurtasunez identifikatu. Idatzi aurretik berrikusi behar dira.",
+  "conflictNone": "Ez dago gatazkarik eremuetan. Sakatu Berriro saiatu agenda sinkronizatu eta kargatzeko.",
+  "conflictReview": "Berriro egiaztatu",
+  "conflictApply": "Gorde eta sinkronizatu",
+  "conflictChanged": "Datuak aldatu egin dira aukerak ireki zenituenetik. Eguneratu aukerak eta hautatu berriro.",
+  "conflictPaused": "SINKRONIZAZIOA ETENDA",
+  "conflictChoose": "Balio hau mantendu",
+  "conflictSelected": "Hautatutako balioa",
+  "conflictApplyHelp": "Agendan eta Googlen aplikatuko da."
 }
